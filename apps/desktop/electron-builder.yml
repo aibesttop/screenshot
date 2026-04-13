@@ -1,0 +1,77 @@
+appId: io.snaplink.app
+productName: SnapLink
+copyright: Copyright © 2026 SnapLink Inc.
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - "dist-electron/**/*"
+  - "dist-renderer/**/*"
+  - "!node_modules/**/*"
+
+asar: true
+
+# macOS
+mac:
+  category: public.app-category.developer-tools
+  icon: build/icon.icns
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+    - target: zip
+      arch: [x64, arm64]
+
+dmg:
+  sign: true
+  contents:
+    - x: 410
+      y: 150
+      type: link
+      path: /Applications
+    - x: 130
+      y: 150
+      type: file
+
+# Windows
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch: [x64, arm64]
+    - target: portable
+      arch: [x64]
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: SnapLink
+
+# Linux
+linux:
+  icon: build/icon.png
+  category: Utility
+  synopsis: "Screenshot to URL for AI workflows"
+  target:
+    - AppImage
+    - deb
+    - rpm
+    - snap
+  desktop:
+    Name: SnapLink
+    Comment: "Screenshot to URL for AI workflows"
+    Categories: Utility;Network;
+    MimeType: x-scheme-handler/snaplink;
+
+publish:
+  - provider: github
+    owner: yourorg
+    repo: snaplink
+    releaseType: release
