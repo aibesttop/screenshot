@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Plan {
+  FREE
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum OcrStatus {
+  SKIPPED
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  emailVerified    DateTime?
+  createdAt        DateTime  @default(now())
+  plan             Plan      @default(FREE)
+  stripeCustomerId String?
+
+  devices  Device[]
+  uploads  Upload[]
+  projects ProjectMember[]
+
+  @@index([email])
+}
+
+model Device {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  platform   String
+  appVersion String
+  tokenHash  String    @unique
+  lastSeenAt DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+  revokedAt  DateTime?
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+model Upload {
+  id          String  @id @default(cuid())
+  shortId     String  @unique
+  userId      String?
+  user        User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  deviceId    String?
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  storageKey   String
+  originalName String?
+  mimeType     String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  sha256       String?
+
+  ocrText   String?   @db.Text
+  ocrLang   String?
+  ocrStatus OcrStatus @default(PENDING)
+
+  burnAfterRead Boolean   @default(false)
+  expiresAt     DateTime?
+  viewCount     Int       @default(0)
+  firstViewedAt DateTime?
+  isBlocked     Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  ipHash    String
+
+  @@index([shortId])
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@index([sha256])
+}
+
+model Project {
+  id        String          @id @default(cuid())
+  name      String
+  slug      String          @unique
+  ownerId   String
+  createdAt DateTime        @default(now())
+  members   ProjectMember[]
+  uploads   Upload[]
+}
+
+model ProjectMember {
+  id        String  @id @default(cuid())
+  userId    String
+  projectId String
+  role      Role    @default(MEMBER)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+}

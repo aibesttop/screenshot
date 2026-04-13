@@ -1,0 +1,21 @@
+{
+  "name": "snaplink",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Screenshot to URL for AI workflows",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:desktop": "npm run dev -w apps/desktop",
+    "dev:backend": "npm run dev -w apps/backend",
+    "build:desktop": "npm run build -w apps/desktop",
+    "build:backend": "npm run build -w apps/backend",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
