@@ -22,6 +22,8 @@
     "nanoid": "^3.3.7",
     "pino": "^9.1.0",
     "sharp": "^0.33.4",
+    "stripe": "^15.8.0",
+    "tesseract.js": "^5.1.0",
     "dotenv": "^16.4.0"
   },
   "devDependencies": {

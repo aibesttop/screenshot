@@ -4,6 +4,9 @@ import { prisma } from "../lib/prisma";
 import { generateShortId } from "../lib/shortid";
 import { validateImage, getExtFromMime } from "../lib/image";
 import { storeFile } from "../services/storage";
+import { stripExifMetadata, getImageDimensions } from "../services/exif";
+import { moderateImage } from "../services/moderation";
+import { enqueueOCR } from "../services/ocr";
 
 const SHORT_URL_DOMAIN =
   process.env.SHORT_URL_DOMAIN ?? "http://localhost:3456";
@@ -46,12 +49,34 @@ export async function uploadRoutes(app: FastifyInstance) {
       const ocrRequested =
         (fields.ocr as { value?: string } | undefined)?.value !== "false";
 
+      // Content moderation
+      const modResult = await moderateImage(buffer);
+      if (!modResult.safe && !modResult.needsReview) {
+        return reply.status(451).send({
+          statusCode: 451,
+          error: "Unavailable For Legal Reasons",
+          message: "This image has been rejected by content moderation",
+        });
+      }
+
+      // Strip EXIF metadata for privacy
+      const stripExif =
+        (fields.strip_exif as { value?: string } | undefined)?.value !== "false";
+      const processedBuffer = stripExif
+        ? await stripExifMetadata(buffer)
+        : buffer;
+
+      // Get image dimensions
+      const dimensions = await getImageDimensions(processedBuffer);
+      const width = dimensions?.width ?? null;
+      const height = dimensions?.height ?? null;
+
       // Generate short ID
       const shortId = await generateShortId(prisma);
 
       // Store file
       const ext = getExtFromMime(validation.detectedMime);
-      const { storageKey, sha256 } = await storeFile(buffer, shortId, ext);
+      const { storageKey, sha256 } = await storeFile(processedBuffer, shortId, ext);
 
       // Hash IP for privacy
       const ip =
@@ -62,16 +87,19 @@ export async function uploadRoutes(app: FastifyInstance) {
         .update(ip)
         .digest("hex");
 
-      // Try to get image dimensions via sharp (optional)
-      let width: number | null = null;
-      let height: number | null = null;
-      try {
-        const sharp = await import("sharp");
-        const metadata = await sharp.default(buffer).metadata();
-        width = metadata.width ?? null;
-        height = metadata.height ?? null;
-      } catch {
-        // sharp not available or image not parseable — skip
+      // Parse expiration
+      const expiresInRaw =
+        (fields.expires_in as { value?: string } | undefined)?.value;
+      let expiresAt: Date | null = null;
+      if (expiresInRaw && expiresInRaw !== "never") {
+        const durations: Record<string, number> = {
+          "1h": 60 * 60 * 1000,
+          "1d": 24 * 60 * 60 * 1000,
+          "7d": 7 * 24 * 60 * 60 * 1000,
+          "30d": 30 * 24 * 60 * 60 * 1000,
+        };
+        const ms = durations[expiresInRaw];
+        if (ms) expiresAt = new Date(Date.now() + ms);
       }
 
       // Create upload record
@@ -81,15 +109,21 @@ export async function uploadRoutes(app: FastifyInstance) {
           storageKey,
           originalName: data.filename,
           mimeType: validation.detectedMime,
-          sizeBytes: buffer.length,
+          sizeBytes: processedBuffer.length,
           width,
           height,
           sha256,
           burnAfterRead,
+          expiresAt,
           ocrStatus: ocrRequested ? "PENDING" : "SKIPPED",
           ipHash,
         },
       });
+
+      // Enqueue OCR processing asynchronously
+      if (ocrRequested) {
+        enqueueOCR(upload.id);
+      }
 
       const url = `${SHORT_URL_DOMAIN}/${shortId}`;
       const rawUrl = `${SHORT_URL_DOMAIN}/raw/${shortId}`;

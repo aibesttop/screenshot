@@ -1,0 +1,25 @@
+{
+  "name": "@snaplink/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for SnapLink — upload screenshots and manage URLs from AI coding tools",
+  "main": "dist/index.js",
+  "bin": {
+    "snaplink-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["mcp", "snaplink", "screenshot", "claude", "ai"],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.7.0",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.15.0",
+    "typescript": "^5.4.0"
+  }
+}

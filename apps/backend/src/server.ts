@@ -6,6 +6,9 @@ import { uploadRoutes } from "./routes/upload";
 import { authRoutes } from "./routes/auth";
 import { serveRoutes } from "./routes/serve";
 import { healthRoutes } from "./routes/health";
+import { billingRoutes } from "./routes/billing";
+import { reportRoutes } from "./routes/report";
+import { startCleanupSchedule } from "./jobs/cleanup";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -46,6 +49,8 @@ async function buildApp() {
   await app.register(healthRoutes);
   await app.register(uploadRoutes, { prefix: "/api/v1" });
   await app.register(authRoutes, { prefix: "/api/v1" });
+  await app.register(billingRoutes, { prefix: "/api/v1" });
+  await app.register(reportRoutes, { prefix: "/api/v1" });
   await app.register(serveRoutes);
 
   return app;
@@ -57,6 +62,9 @@ async function start() {
   try {
     await app.listen({ port: PORT, host: HOST });
     app.log.info(`SnapLink backend running on http://${HOST}:${PORT}`);
+
+    // Start background jobs
+    startCleanupSchedule();
   } catch (err) {
     app.log.error(err);
     process.exit(1);
