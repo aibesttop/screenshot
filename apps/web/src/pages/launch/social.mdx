@@ -1,0 +1,162 @@
+---
+layout: ../../layouts/Doc.astro
+title: Social & community posts
+description: Launch day copy for Twitter, LinkedIn, Mastodon, Reddit, and devrel outreach.
+updated: April 2026
+---
+
+# Social &amp; community posts
+
+Copy for every surface outside Product Hunt and HN.
+
+## Twitter / X single-tweet announce
+
+```
+SnapLink is live.
+
+Drop a screenshot → short URL on your clipboard →
+paste into Claude/ChatGPT/Cursor.
+
+OCR is baked in: append .txt to any URL for plaintext.
+Burn-after-read, EXIF stripping, MCP server.
+Mac/Win/Linux. $5/mo Pro, free for 100/month.
+
+→ snaplink.io
+```
+
+The thread version is in `/launch/product-hunt`.
+
+## LinkedIn
+
+```
+I launched SnapLink today — a small tool with an opinion.
+
+Premise: pasting a screenshot into an LLM prompt shouldn't take 7
+clicks. SnapLink watches your screenshot folder, uploads to a short
+domain (snp.ink), and drops the URL on your clipboard. You paste; the
+model sees the image.
+
+Extras that make it worth paying for:
+• OCR on every upload (append .txt to any URL for plaintext)
+• Burn-after-read + configurable expiration
+• An MCP server so Claude Desktop can search your screenshot history
+
+Built in ~8 weeks. Free for 100 screenshots/month; Pro is $5/month.
+Desktop app on macOS, Windows, Linux — all signed. Backend is
+open-source (MIT) and self-hostable.
+
+If you spend a lot of your day in Claude or Cursor, this might save
+you a thousand clicks a week. Download at snaplink.io.
+```
+
+## Mastodon
+
+```
+New: SnapLink (snaplink.io) — a desktop app that turns every
+screenshot into a short URL with OCR. Built for pasting into Claude
+and Cursor without the "upload → copy URL" dance.
+
+Open source (MIT), self-hostable. Free tier is generous. No
+tracking, no ads, EXIF stripping on by default.
+
+Mac + Windows + Linux.
+
+#SelfHosted #AItools #foss
+```
+
+## Reddit posts
+
+### r/ClaudeAI
+
+**Title:** "Tool: turn any screenshot into a URL Claude can fetch — with OCR"
+
+```
+Been using SnapLink for a few weeks now. It watches my screenshot
+folder, uploads the image to a short URL, and puts the link on my
+clipboard. Paste into Claude and it fetches the image directly. No
+file attachment dance.
+
+Extra feature I didn't expect to love: append `.txt` to any URL to
+get the OCR plaintext. So instead of pasting a full-width screenshot
+of a stack trace, I paste the 20-char .txt URL and Claude sees both
+the visual context AND the text. Saves context window massively.
+
+Also ships an MCP server — Claude Desktop can now search my
+screenshot history by OCR content. "find the screenshot from
+yesterday where the API returned 429" → Claude pulls up the exact one.
+
+Free for 100/month. $5/mo Pro. Open source, self-hostable.
+
+Not affiliated beyond being the author — happy to answer questions.
+
+snaplink.io
+```
+
+### r/MacApps / r/SideProject
+
+Same lede, soften the pitch, skip the AI-specific framing.
+
+## Devrel / hunter DMs
+
+```
+Hi <name> — I launched a small developer tool today called SnapLink.
+It turns screenshots into URLs with OCR, designed for pasting into
+Claude/ChatGPT/Cursor. 8 weeks of building, first 100 beta users love
+it. If you're open to trying, I'd love 30 seconds of feedback
+— no strings. snaplink.io
+```
+
+## Discord / Slack community messages
+
+Only post in communities where you've been active for 30+ days. Don't
+drive-by promote.
+
+**Dev tool Discords (ex: Claude Community, Cursor, Raycast):**
+
+```
+👋 sharing something I shipped today in case it's useful — SnapLink
+is a Mac/Win/Linux app that turns every screenshot into a short URL
+with OCR, made for pasting into Claude or Cursor. Free for 100/mo.
+MIT backend. Happy for feedback: snaplink.io
+```
+
+## Email to beta users
+
+Subject: `SnapLink 1.0 is public — thank you`
+
+```
+Hi {{first_name}},
+
+Short one: SnapLink 1.0 shipped today. Public on Product Hunt and HN
+right now.
+
+You've been using the beta, so the app will auto-update to 1.0 over
+the next 24h (or manually: quit + relaunch). Nothing will change for
+you except:
+
+1. New Account tab, with a "Manage subscription" button if you're on
+   Pro.
+2. New in-app feedback form (Settings → Account → Send feedback). The
+   email channel is still there, but the in-app form auto-attaches
+   diagnostics, which makes bug reports much faster to resolve.
+
+If you're willing: an upvote on PH helps a lot.
+
+→ {{PH_LINK}}
+
+Thanks for using something I made.
+
+— {{founder_name}}
+```
+
+## Launch-day checklist
+
+- [ ] Tuesday 00:01 PT: PH submission goes live
+- [ ] Tuesday 06:30 PT: HN Show HN submission
+- [ ] Tuesday 09:00 ET: Twitter thread
+- [ ] Tuesday 09:30 ET: LinkedIn post
+- [ ] Tuesday 10:00 ET: Mastodon post
+- [ ] Tuesday 10:30 ET: Reddit (schedule across 3 subs, don't blast)
+- [ ] Tuesday 11:00 ET: Email to beta users (BCC batched 50 at a time)
+- [ ] Tuesday all day: reply to every comment within 2 hours
+- [ ] Wednesday: thank-you tweet + metrics recap

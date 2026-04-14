@@ -1,0 +1,44 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-ink-800 mt-24 py-10 text-sm text-ink-400">
+  <div class="max-w-6xl mx-auto px-5 grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+    <div>
+      <div class="text-white font-semibold mb-3">SnapLink</div>
+      <p class="text-ink-400 leading-relaxed">
+        Drop a screenshot, get a short URL. Built for AI workflows.
+      </p>
+    </div>
+    <div>
+      <div class="text-white font-medium mb-3">Product</div>
+      <ul class="space-y-2">
+        <li><a href="/pricing" class="no-underline text-ink-300 hover:text-white">Pricing</a></li>
+        <li><a href="/docs" class="no-underline text-ink-300 hover:text-white">Documentation</a></li>
+        <li><a href="/docs/mcp" class="no-underline text-ink-300 hover:text-white">MCP integration</a></li>
+        <li><a href="https://github.com/aibesttop/screenshot/releases/latest" class="no-underline text-ink-300 hover:text-white">Download</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="text-white font-medium mb-3">Resources</div>
+      <ul class="space-y-2">
+        <li><a href="/support" class="no-underline text-ink-300 hover:text-white">Support</a></li>
+        <li><a href="/docs/faq" class="no-underline text-ink-300 hover:text-white">FAQ</a></li>
+        <li><a href="https://github.com/aibesttop/screenshot" class="no-underline text-ink-300 hover:text-white">GitHub</a></li>
+        <li><a href="https://status.snaplink.io" class="no-underline text-ink-300 hover:text-white">Status</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="text-white font-medium mb-3">Legal</div>
+      <ul class="space-y-2">
+        <li><a href="/legal/privacy" class="no-underline text-ink-300 hover:text-white">Privacy Policy</a></li>
+        <li><a href="/legal/terms" class="no-underline text-ink-300 hover:text-white">Terms of Service</a></li>
+        <li><a href="mailto:security@snaplink.io" class="no-underline text-ink-300 hover:text-white">Security</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto px-5 mt-8 pt-6 border-t border-ink-800 flex flex-col sm:flex-row justify-between gap-3 text-ink-500">
+    <div>&copy; {year} SnapLink. All rights reserved.</div>
+    <div>Made for developers using Claude, ChatGPT, and Cursor.</div>
+  </div>
+</footer>

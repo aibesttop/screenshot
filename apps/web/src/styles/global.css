@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  @apply bg-ink-950 text-ink-100 antialiased;
+  font-feature-settings: "cv11", "ss01", "ss03";
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(91, 140, 255, 0.15), transparent 60%),
+    radial-gradient(800px 400px at 100% 20%, rgba(91, 140, 255, 0.08), transparent 60%),
+    #05060e;
+  min-height: 100dvh;
+}
+
+a {
+  @apply text-brand hover:text-brand-600 transition-colors;
+}
+
+code {
+  @apply font-mono text-[0.9em] bg-ink-800 text-ink-100 rounded px-1.5 py-0.5 border border-ink-700;
+}
+
+pre code {
+  @apply bg-transparent border-0 p-0 text-sm;
+}
+
+pre {
+  @apply bg-ink-900 border border-ink-700 rounded-lg p-4 overflow-x-auto text-sm;
+}
+
+.doc-prose {
+  @apply max-w-none text-ink-200 leading-relaxed;
+}
+.doc-prose h1 { @apply text-3xl font-semibold text-white mt-0 mb-6; }
+.doc-prose h2 { @apply text-2xl font-semibold text-white mt-12 mb-4; }
+.doc-prose h3 { @apply text-lg font-semibold text-white mt-8 mb-3; }
+.doc-prose p { @apply my-4; }
+.doc-prose ul { @apply list-disc pl-6 my-4 space-y-1.5; }
+.doc-prose ol { @apply list-decimal pl-6 my-4 space-y-1.5; }
+.doc-prose blockquote { @apply border-l-2 border-brand pl-4 text-ink-300 italic my-6; }
+.doc-prose hr { @apply my-10 border-ink-700; }
+.doc-prose a { @apply underline underline-offset-2; }
+.doc-prose table { @apply w-full my-6 text-sm; }
+.doc-prose th { @apply text-left font-medium text-white border-b border-ink-700 py-2 px-3; }
+.doc-prose td { @apply border-b border-ink-800 py-2 px-3; }

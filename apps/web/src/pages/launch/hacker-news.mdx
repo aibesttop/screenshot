@@ -1,0 +1,146 @@
+---
+layout: ../../layouts/Doc.astro
+title: Hacker News launch
+description: Show HN post and prepared responses for common HN skepticism.
+updated: April 2026
+---
+
+# Hacker News launch kit
+
+Target: "Show HN" on the same Tuesday as Product Hunt, submitted
+around 6:30 AM PT (peak front-page window). The post should be
+low-hype and technical — HN doesn't like marketing copy.
+
+## Title
+
+```
+Show HN: SnapLink – Screenshot to URL with OCR, built for AI workflows
+```
+
+Under 80 characters. No emojis. "Show HN:" prefix is the key ranking
+signal.
+
+## URL to submit
+
+```
+https://snaplink.io
+```
+
+Not `github.com/aibesttop/screenshot` — the landing page explains the
+product better than the repo. The first comment should include the
+GitHub link.
+
+## First comment (posted as OP within 30 seconds of submission)
+
+```
+Hi HN. Author here.
+
+SnapLink watches your screenshot folder, uploads each new screenshot to
+our backend, and puts a short URL (snp.ink/xxxxxx) on your clipboard.
+The pitch is that this is the path of least resistance for pasting a
+screenshot into Claude, ChatGPT, or Cursor — LLMs accept image URLs
+directly, so once the URL is on your clipboard you're already in the
+prompt.
+
+The three things that make SnapLink different from a generic image
+host:
+
+1. Tesseract OCR runs on every upload. Append ".txt" to any URL and you
+   get the plain-text OCR output. So https://snp.ink/a7Xc9f2 is the
+   image and https://snp.ink/a7Xc9f2.txt is the text. This is the
+   killer feature for pasting terminal errors into a prompt — saves
+   re-typing.
+
+2. Burn-after-read links that auto-delete on first fetch, configurable
+   per-upload. EXIF stripping is on by default. You can set a default
+   expiration (1h / 1d / 7d / 30d / never).
+
+3. An MCP server package (@snaplink/mcp-server) that exposes your
+   screenshot history to Claude Desktop. Claude can list, search by
+   OCR text, and delete screenshots via tool calls.
+
+Stack:
+
+- Desktop: Electron + Vite + React + Zustand. Native tray on all three
+  platforms, global hotkeys via Electron's globalShortcut, settings
+  persisted with electron-store, auth tokens in the OS keychain
+  (keytar).
+- Backend: Fastify + Prisma + Postgres + Cloudflare R2. Tesseract runs
+  in a worker process, results indexed for search. Stripe for billing.
+- Short URLs are 6-char base62 IDs mapped at the edge via a Cloudflare
+  Worker.
+
+Free tier is 100 uploads/month, Pro is $5/month. Full backend source
+is MIT on GitHub (link below); desktop app ships as a signed DMG/MSI/
+AppImage. You can self-host the backend and point the desktop app at
+your own server.
+
+Open to feedback, especially on:
+
+- OCR accuracy on dark-theme terminals (I pre-process with grayscale +
+  threshold; curious if anyone has a better pipeline).
+- The MCP API shape — I went with search_text, list, get, delete. What
+  else would you want Claude to do?
+
+GitHub: https://github.com/aibesttop/screenshot
+Docs:   https://snaplink.io/docs
+```
+
+## Prepared responses to common HN objections
+
+### "Why not just use imgur / 0x0.st / file.io?"
+
+> Fair. Those are great for one-off image sharing. SnapLink's
+> opinionated choices are: (1) OCR text served alongside the image,
+> (2) native desktop watcher so the URL is already on your clipboard
+> by the time your shutter animation ends, (3) burn-after-read and
+> EXIF stripping, (4) an MCP server. If you don't need any of those,
+> 0x0.st is a one-liner curl command and that's completely valid.
+
+### "Electron? Really?"
+
+> Yeah — the alternative would be a Swift/C#/GTK app × 3 platforms,
+> which I wasn't going to ship as a solo dev in a reasonable time
+> frame. Memory footprint is ~120 MB idle, which I think is defensible
+> for something you keep running full-time. If someone wants to
+> contribute a Tauri port the bounty is substantial.
+
+### "Your short domain is .ink? Phishing bait."
+
+> We're on the TLD allowlist and all links render with full https://
+> and favicon in Slack, Discord, etc. But yes, for high-trust contexts
+> Team plan supports custom domains.
+
+### "How is this not a CSAM distribution platform waiting to happen?"
+
+> All uploads are scanned with Microsoft PhotoDNA (in v1) against
+> NCMEC hashes. Repeat abusers lose access. Reports are triaged within
+> 24 hours. We take takedowns very seriously because this question is
+> existential for any hosting service.
+
+### "Privacy?"
+
+> EXIF is stripped by default. Uploads honor the expiration you set.
+> We don't train on user content. We don't share with third parties.
+> Privacy policy at /legal/privacy has the full sub-processor list.
+
+### "Open source?"
+
+> Desktop + backend are MIT on GitHub. Short domain + hosted service
+> are proprietary. You can self-host the whole thing end-to-end.
+
+### "What's the business model?"
+
+> $5/month Pro for unlimited uploads + MCP + burn-after-read +
+> multi-language OCR. $12/seat Team for shared workspaces, SSO,
+> custom domains. That's it. No ads, no data sale, no "enterprise,
+> contact us for pricing."
+
+## Submission checklist
+
+- [ ] Submit around 6:30 AM PT (Tuesday preferred)
+- [ ] Post first comment immediately after submission
+- [ ] Reply to every top-level comment within 2 hours
+- [ ] Don't ask friends to upvote (fastest way to get flagged)
+- [ ] Keep the GitHub repo README up-to-date with the submission
+- [ ] Watch for dupes in /newest before submitting

@@ -28,6 +28,24 @@ export interface SnapLinkAPI {
   loginWithBrowser: () => Promise<{ sessionId: string }>;
   logout: () => Promise<{ success: boolean }>;
 
+  // Billing
+  startCheckout: (
+    plan?: "pro" | "team"
+  ) => Promise<{ success: boolean; url?: string; error?: string }>;
+  openCustomerPortal: () => Promise<{
+    success: boolean;
+    url?: string;
+    error?: string;
+  }>;
+
+  // Feedback
+  submitFeedback: (payload: {
+    category: "bug" | "feature" | "question" | "other";
+    message: string;
+    email?: string;
+    includeDiagnostics?: boolean;
+  }) => Promise<{ success: boolean; error?: string }>;
+
   // System
   openUrl: (url: string) => Promise<void>;
   showItemInFolder: (filepath: string) => Promise<void>;
@@ -156,6 +174,9 @@ function createMockAPI(): SnapLinkAPI {
     onUploadError: () => () => {},
     loginWithBrowser: async () => ({ sessionId: "mock" }),
     logout: async () => ({ success: true }),
+    startCheckout: async () => ({ success: true, url: "https://checkout.stripe.com/mock" }),
+    openCustomerPortal: async () => ({ success: true, url: "https://billing.stripe.com/mock" }),
+    submitFeedback: async () => ({ success: true }),
     openUrl: async () => {},
     showItemInFolder: async () => {},
     platform: "darwin",

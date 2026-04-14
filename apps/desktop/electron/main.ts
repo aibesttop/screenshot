@@ -19,6 +19,8 @@ import { registerHotkeys, unregisterHotkeys } from "./services/hotkeys";
 import { registerUploadIPC, addRecentUpload, getRecentUrls } from "./ipc/upload";
 import { registerSettingsIPC } from "./ipc/settings";
 import { registerAuthIPC, handleAuthCallback } from "./ipc/auth";
+import { registerBillingIPC } from "./ipc/billing";
+import { registerFeedbackIPC } from "./ipc/feedback";
 import { uploadClipboardImage } from "./services/uploader";
 import { CopyFormat } from "./services/clipboard";
 
@@ -214,6 +216,8 @@ app.whenReady().then(() => {
   registerUploadIPC();
   registerSettingsIPC();
   registerAuthIPC();
+  registerBillingIPC();
+  registerFeedbackIPC();
 
   // System IPC
   ipcMain.handle("system:openUrl", (_event, url: string) => {

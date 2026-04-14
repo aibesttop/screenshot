@@ -1,0 +1,86 @@
+---
+layout: ../../layouts/Doc.astro
+title: Configuration
+description: Every SnapLink setting explained — watch paths, clipboard format, privacy, OCR, hotkeys.
+updated: April 2026
+---
+
+# Configuration
+
+SnapLink exposes all settings through the desktop app (Settings tab) and
+persists them with `electron-store` under platform-appropriate paths:
+
+- **macOS**: `~/Library/Application Support/SnapLink/config.json`
+- **Windows**: `%APPDATA%/SnapLink/config.json`
+- **Linux**: `~/.config/SnapLink/config.json`
+
+Editing the file directly is supported but the desktop UI should be preferred.
+
+## Core
+
+| Setting | Default | What it does |
+|---|---|---|
+| `autoUpload` | `true` | Upload every new screenshot automatically. Turn off to use the manual hotkey only. |
+| `autoStart` | `true` | Launch SnapLink at login. Uses `LaunchAgents` on macOS, Startup on Windows, `.desktop` on Linux. |
+| `uploadNotification` | `true` | Show a native toast on every successful upload. |
+
+## Clipboard format
+
+What gets copied when an upload completes:
+
+| Value | Example |
+|---|---|
+| `url` | `https://snp.ink/a7Xc9f2` |
+| `markdown` | `![screenshot](https://snp.ink/a7Xc9f2)` |
+| `html` | `<img src="https://snp.ink/a7Xc9f2" />` |
+
+## Privacy
+
+| Setting | Default | What it does |
+|---|---|---|
+| `defaultBurnAfterRead` | `false` | New uploads auto-delete after the first GET. |
+| `stripExifMetadata` | `true` | Remove GPS coordinates, device info, and other EXIF before upload. |
+| `defaultExpiresIn` | `never` | One of `never`, `1h`, `1d`, `7d`, `30d`. |
+
+## OCR
+
+| Setting | Default | What it does |
+|---|---|---|
+| `ocrEnabled` | `true` | Run Tesseract on every upload; exposes `.txt` endpoint. |
+| `ocrLanguages` | `["eng"]` | Tesseract language codes. Pro users can add more; see the [OCR docs](/docs/ocr). |
+
+## Hotkeys
+
+All hotkeys are globally registered via Electron's `globalShortcut`.
+
+| Setting | Default |
+|---|---|
+| `hotkeys.uploadClipboard` | <code>CmdOrCtrl+Shift+V</code> |
+| `hotkeys.toggleHistory` | <code>CmdOrCtrl+Shift+H</code> |
+| `hotkeys.togglePause` | <code>CmdOrCtrl+Shift+P</code> |
+
+If a chord is already claimed by another app, SnapLink logs a warning and
+leaves it unregistered — the tray menu will still work.
+
+## Watch paths
+
+`watchPaths` is auto-detected per platform:
+
+- **macOS**: `~/Desktop` and the folder set by `defaults read com.apple.screencapture location`
+- **Windows**: `%USERPROFILE%\Pictures\Screenshots`
+- **Linux**: `$XDG_PICTURES_DIR/Screenshots`, falling back to `~/Pictures`
+
+Add custom paths from Settings → Advanced → Watch paths.
+
+## Advanced
+
+| Setting | Default | Notes |
+|---|---|---|
+| `uploadEndpoint` | `https://api.snaplink.io` | Override this to point at your self-hosted backend. |
+| `analyticsOptIn` | `false` | If enabled, sends anonymous feature usage to PostHog. |
+| `telemetryOptIn` | `false` | If enabled, sends crash reports to Sentry. |
+
+## Resetting
+
+To fully reset SnapLink, quit the app and delete the config directory above.
+Next launch will re-run onboarding.

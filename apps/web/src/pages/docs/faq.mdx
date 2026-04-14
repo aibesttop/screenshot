@@ -1,0 +1,72 @@
+---
+layout: ../../layouts/Doc.astro
+title: FAQ
+description: Frequently asked questions about SnapLink.
+updated: April 2026
+---
+
+# Frequently asked questions
+
+## Is SnapLink free?
+
+Yes — the free tier covers 100 screenshots per month forever. Pro is $5/month
+for unlimited uploads plus MCP, burn-after-read, and custom expiration.
+
+## Where are my screenshots stored?
+
+On Cloudflare R2, with uploads served from a short domain (`snp.ink`). See the
+[Privacy Policy](/legal/privacy) for retention and sub-processors.
+
+## Can I delete a screenshot?
+
+Yes — from the desktop app's History tab, or by hitting the API directly.
+Burn-after-read uploads delete themselves after the first view. A nightly
+cleanup job removes anything past its expiration.
+
+## Will Claude/ChatGPT leak my screenshots?
+
+LLM providers fetch the image when you paste the URL. SnapLink doesn't know
+which LLM is fetching — the URL is just a public link. If the content is
+sensitive, use burn-after-read or a 1-hour expiration.
+
+## Does SnapLink work offline?
+
+The watcher keeps running. Uploads queue until the network returns, then
+flush in order. The URL arrives in your clipboard as soon as the upload
+completes.
+
+## Can I use my own short domain?
+
+Team plan includes custom domains. Point a CNAME at `edge.snaplink.io` and
+we'll issue a cert. Pro and Free use `snp.ink`.
+
+## How do hotkeys work on Wayland?
+
+Global hotkeys on Wayland are compositor-specific. SnapLink supports GNOME
+and KDE via their respective shortcut APIs. On other compositors, fall back
+to your compositor's keybinding config to invoke `snaplink --upload-clipboard`.
+
+## Do you support screen-recording?
+
+Not yet. SnapLink is image-only. Video is on the roadmap for v2.
+
+## How is SnapLink different from imgur / 0x0.st / filebin?
+
+- **Built for AI**: OCR is first-class, with a `.txt` endpoint on every URL.
+- **Native desktop app**: zero-click uploads on screenshot capture.
+- **MCP server**: Claude can search your screenshot history directly.
+- **Real privacy**: EXIF stripping, burn-after-read, configurable expiration.
+
+## Can I self-host?
+
+Yes. The backend is MIT-licensed. Point the desktop app at your server via
+Settings → Advanced → Upload endpoint. Self-hosted installs don't get our
+cleanup automation or content moderation — you run what you deploy.
+
+## Where do I report a bug?
+
+Email <a href="mailto:support@snaplink.io">support@snaplink.io</a> or open an
+issue at
+<a href="https://github.com/aibesttop/screenshot/issues">aibesttop/screenshot</a>.
+Security reports go to <a href="mailto:security@snaplink.io">security@snaplink.io</a>
+with optional PGP encryption (fingerprint in the Privacy Policy).

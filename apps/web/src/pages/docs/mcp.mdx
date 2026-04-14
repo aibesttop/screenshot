@@ -1,0 +1,78 @@
+---
+layout: ../../layouts/Doc.astro
+title: MCP integration
+description: Wire SnapLink's Model Context Protocol server into Claude Desktop.
+updated: April 2026
+---
+
+# MCP integration
+
+SnapLink ships a Model Context Protocol server
+([@snaplink/mcp-server](https://github.com/aibesttop/screenshot/tree/main/packages/mcp-server))
+that exposes your screenshot history as tools any MCP-aware client can use.
+
+## Tools exposed
+
+| Tool | Purpose |
+|---|---|
+| `snaplink_list` | Return the most recent uploads with URLs, timestamps, and OCR status. |
+| `snaplink_search_text` | Full-text search across OCR output. Returns matching screenshots with snippets. |
+| `snaplink_get` | Fetch a single upload's metadata, including OCR text and optional image URL. |
+| `snaplink_delete` | Remove an upload. Requires confirmation. |
+
+## Claude Desktop setup
+
+1. Open Claude Desktop → Settings → Developer → Edit Config.
+2. Add a `snaplink` entry under `mcpServers`:
+
+```json
+{
+  "mcpServers": {
+    "snaplink": {
+      "command": "npx",
+      "args": ["-y", "@snaplink/mcp-server"],
+      "env": {
+        "SNAPLINK_API_TOKEN": "sk_pro_xxxxxxxxxxxxxxxx"
+      }
+    }
+  }
+}
+```
+
+3. Generate an API token from the SnapLink desktop app: Settings → Account →
+   API tokens → Create. Tokens are scoped per-device and can be revoked.
+4. Restart Claude Desktop. You should see the SnapLink tools available in a
+   new conversation.
+
+## Example prompts
+
+Once configured, Claude can call SnapLink tools directly:
+
+> Find the screenshot where I showed you the TypeError from yesterday.
+
+> List my last 10 uploads and give me a one-line description of each.
+
+> Delete every screenshot older than 7 days.
+
+Claude will call `snaplink_search_text`, `snaplink_list`, and
+`snaplink_delete` respectively, then summarize the results.
+
+## Manual invocation
+
+You can also run the MCP server standalone for debugging:
+
+```
+npx -y @snaplink/mcp-server
+```
+
+It reads JSON-RPC on stdin and writes responses to stdout. See the
+[MCP spec](https://modelcontextprotocol.io) for the wire format.
+
+## Security notes
+
+- Tokens are stored in the OS keychain, never in a config file on disk.
+- The server only reads your own uploads — it cannot access other users'
+  data even if you pass a compromised token.
+- Every `snaplink_delete` call requires the user to confirm in Claude's UI.
+  The server rejects delete calls that arrive without the `confirm: true`
+  parameter set by the user.

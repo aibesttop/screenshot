@@ -42,6 +42,19 @@ const api = {
   loginWithBrowser: () => ipcRenderer.invoke("auth:login"),
   logout: () => ipcRenderer.invoke("auth:logout"),
 
+  // Billing
+  startCheckout: (plan: "pro" | "team" = "pro") =>
+    ipcRenderer.invoke("billing:checkout", plan),
+  openCustomerPortal: () => ipcRenderer.invoke("billing:portal"),
+
+  // Feedback
+  submitFeedback: (payload: {
+    category: "bug" | "feature" | "question" | "other";
+    message: string;
+    email?: string;
+    includeDiagnostics?: boolean;
+  }) => ipcRenderer.invoke("feedback:submit", payload),
+
   // System
   openUrl: (url: string) => ipcRenderer.invoke("system:openUrl", url),
   showItemInFolder: (filepath: string) =>

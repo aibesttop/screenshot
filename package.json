@@ -10,8 +10,10 @@
   "scripts": {
     "dev:desktop": "npm run dev -w apps/desktop",
     "dev:backend": "npm run dev -w apps/backend",
+    "dev:web": "npm run dev -w apps/web",
     "build:desktop": "npm run build -w apps/desktop",
     "build:backend": "npm run build -w apps/backend",
+    "build:web": "npm run build -w apps/web",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present"
   },

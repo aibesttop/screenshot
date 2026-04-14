@@ -1,0 +1,163 @@
+---
+import Base from "../layouts/Base.astro";
+
+const plans = [
+  {
+    name: "Free",
+    price: "$0",
+    cadence: "forever",
+    tagline: "For hobby use and trying things out.",
+    cta: { label: "Download", href: "https://github.com/aibesttop/screenshot/releases/latest" },
+    features: [
+      "100 screenshots / month",
+      "Short URLs on snp.ink",
+      "OCR (English only)",
+      "7-day retention",
+      "EXIF metadata stripping",
+    ],
+    excluded: ["Burn after read", "Custom expiration", "MCP server", "Team plans"],
+    highlight: false,
+  },
+  {
+    name: "Pro",
+    price: "$5",
+    cadence: "per month",
+    tagline: "For developers using AI tools daily.",
+    cta: { label: "Start Pro trial", href: "/docs/getting-started#upgrade" },
+    features: [
+      "Unlimited screenshots",
+      "OCR in 100+ languages",
+      "Burn-after-read links",
+      "Configurable expiration",
+      "MCP server access",
+      "30-day upload history",
+      "Priority email support",
+    ],
+    excluded: [],
+    highlight: true,
+  },
+  {
+    name: "Team",
+    price: "$12",
+    cadence: "per seat / month",
+    tagline: "For squads that share context.",
+    cta: { label: "Contact sales", href: "mailto:sales@snaplink.io" },
+    features: [
+      "Everything in Pro",
+      "Shared team workspaces",
+      "Role-based access",
+      "Audit log + SSO",
+      "Custom domains",
+      "SLA + dedicated support",
+    ],
+    excluded: [],
+    highlight: false,
+  },
+];
+
+const faqs = [
+  {
+    q: "What counts as a screenshot?",
+    a: "Any image upload — manual or automatic. We don't charge per view.",
+  },
+  {
+    q: "Can I self-host?",
+    a: "Yes. The backend is open source and runs as a single Fastify process with Postgres and R2-compatible storage. See the installation docs.",
+  },
+  {
+    q: "Is there a refund policy?",
+    a: "Full refund within 14 days, no questions asked. Email billing@snaplink.io.",
+  },
+  {
+    q: "How do you handle cancellations?",
+    a: "You can cancel any time from the Stripe customer portal linked in the desktop app. Your plan stays active through the billing period.",
+  },
+];
+---
+
+<Base title="Pricing — SnapLink" description="Simple, per-seat pricing for SnapLink. Free tier includes 100 screenshots per month.">
+  <section class="max-w-6xl mx-auto px-5 pt-16 pb-10">
+    <h1 class="text-4xl sm:text-5xl font-semibold text-white">Pricing</h1>
+    <p class="mt-4 text-ink-300 text-lg max-w-2xl">
+      Free for hobby use. Pay when you're moving enough pixels that it matters.
+    </p>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-5 pb-16">
+    <div class="grid gap-6 md:grid-cols-3">
+      {
+        plans.map((p) => (
+          <div
+            class={`rounded-xl p-6 flex flex-col ${
+              p.highlight
+                ? "border-2 border-brand bg-ink-900 shadow-2xl shadow-brand/10"
+                : "border border-ink-800 bg-ink-900/40"
+            }`}
+          >
+            <div class="flex items-baseline justify-between">
+              <div class="text-xl font-semibold text-white">{p.name}</div>
+              {p.highlight && (
+                <span class="text-xs font-medium text-brand bg-brand/10 border border-brand/30 rounded-full px-2 py-0.5">
+                  Most popular
+                </span>
+              )}
+            </div>
+            <div class="mt-4 flex items-baseline gap-2">
+              <span class="text-4xl font-semibold text-white">{p.price}</span>
+              <span class="text-ink-400 text-sm">{p.cadence}</span>
+            </div>
+            <p class="mt-2 text-ink-300 text-sm">{p.tagline}</p>
+            <a
+              href={p.cta.href}
+              class={`no-underline block text-center mt-6 rounded-lg px-4 py-2.5 font-medium ${
+                p.highlight
+                  ? "bg-brand hover:bg-brand-600 text-white"
+                  : "border border-ink-700 text-white hover:border-ink-500"
+              }`}
+            >
+              {p.cta.label}
+            </a>
+            <ul class="mt-6 space-y-2 text-sm">
+              {
+                p.features.map((f) => (
+                  <li class="flex gap-2 items-start text-ink-200">
+                    <span class="text-brand mt-0.5">✓</span>
+                    <span>{f}</span>
+                  </li>
+                ))
+              }
+              {
+                p.excluded.map((f) => (
+                  <li class="flex gap-2 items-start text-ink-500">
+                    <span class="mt-0.5">–</span>
+                    <span class="line-through">{f}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="max-w-3xl mx-auto px-5 py-12">
+    <h2 class="text-2xl font-semibold text-white mb-6">Pricing FAQ</h2>
+    <div class="space-y-4">
+      {
+        faqs.map((f) => (
+          <details class="rounded-lg border border-ink-800 bg-ink-900/40 p-4 group">
+            <summary class="cursor-pointer list-none flex items-center justify-between text-white font-medium">
+              {f.q}
+              <span class="text-ink-500 group-open:rotate-180 transition-transform">▾</span>
+            </summary>
+            <p class="mt-3 text-ink-300 text-sm leading-relaxed">{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+    <p class="mt-10 text-sm text-ink-400">
+      Still have questions? Write to <a href="mailto:hello@snaplink.io">hello@snaplink.io</a>.
+    </p>
+  </section>
+</Base>

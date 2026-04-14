@@ -8,6 +8,7 @@ import { serveRoutes } from "./routes/serve";
 import { healthRoutes } from "./routes/health";
 import { billingRoutes } from "./routes/billing";
 import { reportRoutes } from "./routes/report";
+import { feedbackRoutes } from "./routes/feedback";
 import { startCleanupSchedule } from "./jobs/cleanup";
 import dotenv from "dotenv";
 
@@ -51,6 +52,7 @@ async function buildApp() {
   await app.register(authRoutes, { prefix: "/api/v1" });
   await app.register(billingRoutes, { prefix: "/api/v1" });
   await app.register(reportRoutes, { prefix: "/api/v1" });
+  await app.register(feedbackRoutes, { prefix: "/api/v1" });
   await app.register(serveRoutes);
 
   return app;

@@ -1,0 +1,134 @@
+---
+layout: ../../layouts/Doc.astro
+title: Product Hunt launch
+description: Copy, gallery, and Q&A ready to paste into Product Hunt's maker form.
+updated: April 2026
+---
+
+# Product Hunt launch kit
+
+Everything in this doc is ready to paste into the Product Hunt submission
+form. Targets Tuesday 12:01 AM PT launch.
+
+## Tagline (60 chars)
+
+```
+Screenshot to URL, with OCR, built for Claude & ChatGPT
+```
+
+Backup:
+
+```
+The fastest way to get a screenshot into your LLM prompt
+```
+
+## Topics
+
+`Developer Tools`, `Artificial Intelligence`, `Productivity`, `Mac Apps`
+
+## First comment (from the maker)
+
+```
+Hey Product Hunt 👋
+
+I built SnapLink because every time I wanted to show Claude a screenshot I
+ended up: screenshotting → opening Slack → uploading → right-click copy
+image URL → pasting. The flow was friction right where I had the least
+patience.
+
+SnapLink watches your screenshot folder and turns every new capture into a
+short URL (on snp.ink) before your shutter animation finishes. The URL
+lands on your clipboard. Paste it into Claude, ChatGPT, Cursor — done.
+
+Three things that I care about:
+
+1. OCR is baked in. Every URL has a .txt counterpart. So
+   https://snp.ink/a7Xc9f2 is the image, and
+   https://snp.ink/a7Xc9f2.txt is the plain-text OCR. Great for error
+   messages and terminal output you'd otherwise re-type.
+
+2. Burn after read. Optional per-upload. The file deletes itself after the
+   first fetch. Ideal when you're sharing a screenshot of something
+   private with a teammate.
+
+3. MCP server. There's a @snaplink/mcp-server package that exposes your
+   screenshot history to Claude Desktop. "Find the screenshot where I
+   showed you the TypeError yesterday" — and Claude actually finds it.
+
+Free for 100 screenshots/month. Pro is $5/month. Mac, Windows, Linux —
+all three signed and notarized.
+
+I'll be around all day to answer questions. What would you want the tool
+to do that it doesn't yet?
+```
+
+## Gallery / media order
+
+1. **Hero GIF**: screenshot → toast → clipboard URL → paste into Claude → Claude replies with explanation of the screenshot. Under 8 seconds.
+2. **Screenshot: Settings tab**: highlighting burn-after-read, default expiration, strip EXIF.
+3. **Screenshot: History tab** with OCR preview visible.
+4. **Screenshot: Claude Desktop using the MCP server** — the tool-call panel visible.
+5. **Comparison screenshot**: old workflow (7 clicks) vs SnapLink (0 clicks).
+6. **Pricing screenshot**.
+
+Gallery captions are < 80 chars each, all title-case.
+
+## Maker Q&A (prep sheet)
+
+**Why now?**
+> LLMs accept image URLs natively. Until that changed, there was no point
+> in optimizing the "screenshot → URL" path — you had to attach a file
+> anyway. Now the clipboard-to-paste workflow is finally worth it.
+
+**Why not imgur?**
+> Imgur doesn't ship OCR, doesn't expire links, compresses images, and
+> shows ads. SnapLink is the opposite.
+
+**Is it open source?**
+> Yes — the desktop app and backend are MIT on GitHub. You can self-host.
+> The short domain and hosted infra are the proprietary part.
+
+**What about privacy?**
+> EXIF is stripped on upload. Every URL can be set to expire or
+> burn-after-read. We don't train on uploads, don't serve ads, and never
+> will.
+
+**Roadmap?**
+> Next 90 days: custom domains for Team, screen recording (short GIFs),
+> and a CLI (`snaplink upload foo.png`) for CI pipelines.
+
+## Hunter outreach (BCC list)
+
+- [ ] Chris Messina — hunt
+- [ ] Andreas Klinger — tools space
+- [ ] Ben Tossell — automation
+- [ ] Kevin William David — dev tools
+
+Message template:
+
+```
+Hey <name>, launching SnapLink on PH next Tuesday. It turns any
+screenshot into a short URL with OCR, designed for pasting into
+Claude/Cursor. 100 beta users over the last 6 weeks. Would love your
+hunt if it's a fit — happy to send a private demo first.
+```
+
+## Twitter/X thread (launch day, 7 tweets)
+
+1. "I shipped SnapLink on Product Hunt today. TL;DR — drop a screenshot, get a short URL with OCR, paste into Claude. 🔗 [PH link]"
+2. "Why I built it: every time I shared a screenshot with Claude I did a 7-click dance. Screenshot, Slack, upload, copy URL, paste. It was friction right when I wanted to move fast."
+3. "SnapLink watches your screenshot folder. New file? URL on clipboard in a second. Click count: 0. Short domain is snp.ink. Paste works in any LLM that accepts image URLs."
+4. "The killer feature is the .txt trick. Append .txt to any URL and you get the OCR plaintext. Paste a 4000-char error message into Claude by typing 12 characters."
+5. "For sensitive screenshots: burn-after-read. Link deletes itself after the first fetch. Also EXIF stripping on every upload (yes, your GPS coords are gone)."
+6. "There's also a built-in MCP server. Claude Desktop can query your screenshot history directly — 'find the dashboard screenshot from yesterday' and it does."
+7. "Free for 100 screenshots/month, Pro is $5. Mac/Win/Linux, all signed. Would love your feedback → [PH link]. RTs very appreciated 🙏"
+
+## Measurement
+
+Track the following for 72h post-launch:
+
+- PH upvotes, comments, ranking (#1 goal)
+- Installs (counter on landing page)
+- Sign-ups (Stripe dashboard)
+- Twitter impressions + follows
+- HN submission timing (see `/launch/hacker-news`)

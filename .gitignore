@@ -2,6 +2,8 @@ node_modules/
 dist/
 dist-electron/
 dist-renderer/
+.astro/
+apps/web/dist/
 uploads/
 *.log
 .env

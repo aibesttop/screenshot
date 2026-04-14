@@ -1,0 +1,90 @@
+---
+layout: ../../layouts/Doc.astro
+title: Getting started
+description: Install SnapLink and upload your first screenshot in under five minutes.
+updated: April 2026
+---
+
+# Getting started
+
+This walkthrough takes you from zero to your first uploaded screenshot.
+
+## 1. Install SnapLink
+
+Download the installer for your platform from the
+[latest release](https://github.com/aibesttop/screenshot/releases/latest), or
+see the [installation docs](/docs/installation) for Homebrew, Winget, and Snap.
+
+- **macOS**: `SnapLink-1.x.x.dmg` (Apple Silicon + Intel)
+- **Windows**: `SnapLink-Setup-1.x.x.exe`
+- **Linux**: `SnapLink-1.x.x.AppImage` or `.deb` / `.rpm`
+
+On first launch you'll see a one-time onboarding flow that asks for:
+
+- Permission to watch your screenshot folder
+- Permission to register global hotkeys
+- A magic-link sign-in (or skip to stay on the free tier)
+
+## 2. Take a screenshot
+
+Use your OS shortcut:
+
+- **macOS**: <code>⌘⇧3</code> (full screen) or <code>⌘⇧4</code> (region)
+- **Windows**: <code>Win + Shift + S</code>
+- **Linux**: <code>PrtSc</code> or your compositor's built-in tool
+
+SnapLink watches the folder your OS saves screenshots into. Within a second
+you'll see a notification:
+
+> Uploaded to `https://snp.ink/a7Xc9f2` — copied to clipboard
+
+Paste anywhere. The URL is a direct image link; the image is viewable in any
+browser and by any LLM that fetches image URLs.
+
+## 3. Get the OCR text
+
+Append `.txt` to any SnapLink URL to get plain text:
+
+```
+https://snp.ink/a7Xc9f2      # image
+https://snp.ink/a7Xc9f2.txt  # OCR text
+```
+
+This is the killer combo for pasting error messages, terminal output, or
+whiteboard photos into a prompt.
+
+## 4. Paste into your AI tool
+
+**Claude (claude.ai / Claude Desktop):**
+
+```
+What's happening here?
+
+https://snp.ink/a7Xc9f2
+```
+
+Claude fetches the image automatically. No attachment upload needed.
+
+**ChatGPT (vision):**
+
+Paste the URL into a vision-enabled conversation. Same behavior.
+
+**Cursor:**
+
+Drag the URL into a chat or inline edit. Cursor includes it with your prompt.
+
+## 5. Next steps
+
+- Configure burn-after-read, expiration, and EXIF stripping in
+  [settings](/docs/configuration).
+- Wire up the [MCP server](/docs/mcp) so Claude Desktop can search your
+  screenshot history.
+
+## Upgrade
+
+The free tier includes 100 screenshots per month. Hitting the limit shows a
+friendly prompt in the tray icon; you can upgrade to Pro for $5/month from
+Settings → Account → Upgrade, which opens the Stripe checkout in your browser.
+
+Cancel any time from Settings → Account → Manage Subscription — this launches
+the Stripe customer portal.

@@ -1,0 +1,173 @@
+---
+import Base from "../layouts/Base.astro";
+
+const features = [
+  {
+    title: "Drops to the clipboard",
+    body: "The URL is on your clipboard before your screenshot tool finishes its shutter animation. Paste into Claude, ChatGPT, or Cursor without breaking flow.",
+  },
+  {
+    title: "OCR ships with every link",
+    body: "Every image is run through Tesseract. Append .txt to any link to get plain text — perfect for pasting code snippets or error messages to an LLM.",
+  },
+  {
+    title: "Burn after read",
+    body: "One-time view links that delete themselves after the first GET. Ideal for sharing screenshots of production data with a colleague.",
+  },
+  {
+    title: "Short URLs, real domain",
+    body: "snp.ink/ab12cd — 14 characters including the scheme. Your prompts stay readable and your context window stays tight.",
+  },
+  {
+    title: "Works offline-first",
+    body: "Watches your screenshot folder in the background. If the network drops, uploads queue and retry. You never lose a screenshot.",
+  },
+  {
+    title: "MCP server built-in",
+    body: "Expose snaplink_list and snaplink_search_text as Model Context Protocol tools. Claude Desktop can query your screenshot history directly.",
+  },
+];
+
+const ai = [
+  {
+    name: "Claude",
+    line: "Paste the URL directly. Claude fetches the image and reads OCR text in the same turn.",
+  },
+  {
+    name: "ChatGPT",
+    line: "Vision mode accepts SnapLink URLs without an extra download step.",
+  },
+  {
+    name: "Cursor",
+    line: "Attach a URL to a chat or an inline edit. Cursor pulls the image and passes it to your selected model.",
+  },
+];
+---
+
+<Base>
+  <section class="max-w-6xl mx-auto px-5 pt-20 pb-24">
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 text-xs text-brand bg-brand/10 border border-brand/30 rounded-full px-3 py-1 mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+        Now in public beta
+      </div>
+      <h1 class="text-5xl sm:text-6xl font-semibold tracking-tight text-white">
+        Drop a screenshot.<br />
+        <span class="text-brand">Get a short URL.</span>
+      </h1>
+      <p class="mt-6 text-xl text-ink-300 leading-relaxed">
+        SnapLink watches your screenshot folder and turns every capture into a
+        short, shareable URL with OCR built-in — designed for pasting into
+        Claude, ChatGPT, and Cursor.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a
+          href="https://github.com/aibesttop/screenshot/releases/latest"
+          class="no-underline rounded-lg bg-brand hover:bg-brand-600 text-white font-medium px-5 py-3"
+        >
+          Download for Mac, Windows, Linux
+        </a>
+        <a
+          href="/docs/getting-started"
+          class="no-underline rounded-lg border border-ink-700 hover:border-ink-500 text-white px-5 py-3"
+        >
+          Read the docs
+        </a>
+      </div>
+      <p class="mt-4 text-sm text-ink-500">
+        Free forever for 100 screenshots / month. Pro starts at $5 / month.
+      </p>
+    </div>
+
+    <div class="mt-20 rounded-xl border border-ink-800 bg-ink-900/60 p-6 shadow-2xl shadow-black/40">
+      <div class="flex items-center gap-1.5 mb-4">
+        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+        <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+        <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+        <span class="ml-3 text-xs text-ink-500">~ snaplink ~</span>
+      </div>
+      <pre class="m-0 border-0 bg-transparent p-0 text-ink-200"><code>{`# You press Cmd+Shift+4 and snip a region.
+# A second later:
+
+✓ screenshot-2026-04-14.png uploaded
+  → https://snp.ink/a7Xc9f2   (copied to clipboard)
+  → OCR: "TypeError: Cannot read property 'length' of undefined"
+
+# Paste into Claude:
+#   https://snp.ink/a7Xc9f2
+# Claude sees the image AND the OCR text.`}</code></pre>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-5 py-16">
+    <h2 class="text-3xl font-semibold text-white mb-2">Built for AI-assisted workflows</h2>
+    <p class="text-ink-300 max-w-2xl">
+      Generic image hosts weren't designed for prompts. SnapLink is.
+    </p>
+    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        features.map((f) => (
+          <div class="rounded-lg border border-ink-800 bg-ink-900/40 p-5">
+            <div class="text-white font-semibold mb-2">{f.title}</div>
+            <p class="text-ink-300 leading-relaxed text-sm">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-5 py-16">
+    <h2 class="text-3xl font-semibold text-white mb-6">Works with the tools you already use</h2>
+    <div class="grid gap-6 md:grid-cols-3">
+      {
+        ai.map((x) => (
+          <div class="rounded-lg border border-ink-800 p-5">
+            <div class="text-white font-semibold mb-2">{x.name}</div>
+            <p class="text-ink-300 text-sm leading-relaxed">{x.line}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-5 py-16">
+    <div class="rounded-xl border border-ink-800 bg-gradient-to-br from-ink-900 to-ink-950 p-10">
+      <h2 class="text-3xl font-semibold text-white">Privacy by default</h2>
+      <p class="mt-3 text-ink-300 max-w-2xl">
+        EXIF data is stripped on every upload. Burn-after-read links disappear
+        after the first view. You can set a default expiration — 1 hour, 1 day,
+        7 days, 30 days, or never — per screenshot. No trackers, no analytics
+        unless you opt in.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/legal/privacy" class="no-underline rounded-lg border border-ink-700 hover:border-ink-500 text-white px-4 py-2 text-sm">
+          Privacy Policy
+        </a>
+        <a href="/docs/configuration" class="no-underline rounded-lg border border-ink-700 hover:border-ink-500 text-white px-4 py-2 text-sm">
+          Privacy settings
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-5 py-20 text-center">
+    <h2 class="text-4xl font-semibold text-white">Ready to stop right-click → copy image address?</h2>
+    <p class="mt-4 text-ink-300 max-w-2xl mx-auto">
+      Install SnapLink and your next screenshot is already a URL.
+    </p>
+    <div class="mt-8 flex justify-center gap-3">
+      <a
+        href="https://github.com/aibesttop/screenshot/releases/latest"
+        class="no-underline rounded-lg bg-brand hover:bg-brand-600 text-white font-medium px-6 py-3"
+      >
+        Download
+      </a>
+      <a
+        href="/pricing"
+        class="no-underline rounded-lg border border-ink-700 hover:border-ink-500 text-white px-6 py-3"
+      >
+        See pricing
+      </a>
+    </div>
+  </section>
+</Base>
