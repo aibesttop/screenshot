@@ -1,0 +1,81 @@
+name: Build Windows
+
+# Build an unsigned Windows installer and upload it as a workflow
+# artifact. Useful for local testing before you have an EV code-signing
+# certificate. Windows SmartScreen will show a "protect your PC" prompt
+# because the build is unsigned — click "More info" → "Run anyway".
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_portable:
+        description: "Also build portable .exe (no install required)"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  push:
+    branches:
+      - "claude/**"
+    paths:
+      - "apps/desktop/**"
+      - "packages/shared-types/**"
+      - ".github/workflows/build-windows.yml"
+
+jobs:
+  build:
+    name: Build unsigned Windows installer
+    runs-on: windows-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Build shared-types
+        run: npm run build -w packages/shared-types
+
+      - name: Build renderer (Vite)
+        working-directory: apps/desktop
+        run: npm run build:renderer
+
+      - name: Build Electron main/preload (tsc)
+        working-directory: apps/desktop
+        run: npm run build:electron
+
+      - name: Build Windows installer (electron-builder)
+        working-directory: apps/desktop
+        env:
+          # No code-signing certificate — produce an unsigned build.
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --win --x64 --publish never
+
+      - name: Show build output
+        working-directory: apps/desktop
+        shell: pwsh
+        run: |
+          Write-Host "== dist contents =="
+          Get-ChildItem -Path dist -File -Recurse | Select-Object FullName, Length
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SnapLink-Windows-unsigned
+          path: |
+            apps/desktop/dist/*.exe
+            apps/desktop/dist/*.blockmap
+            apps/desktop/dist/latest.yml
+          if-no-files-found: error
+          retention-days: 14

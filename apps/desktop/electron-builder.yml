@@ -9,9 +9,11 @@ directories:
 files:
   - "dist-electron/**/*"
   - "dist-renderer/**/*"
-  - "!node_modules/**/*"
+  - "package.json"
 
 asar: true
+asarUnpack:
+  - "node_modules/keytar/**/*"
 
 # macOS
 mac:
@@ -72,6 +74,6 @@ linux:
 
 publish:
   - provider: github
-    owner: yourorg
-    repo: snaplink
+    owner: aibesttop
+    repo: screenshot
     releaseType: release
