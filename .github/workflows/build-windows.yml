@@ -44,6 +44,21 @@ jobs:
         # doesn't yet have a committed package-lock.json.
         run: npm install --no-audit --no-fund
 
+      - name: Ensure electron is resolvable from apps/desktop
+        # With npm workspaces `electron` is typically hoisted to the
+        # root node_modules. electron-builder's `computeElectronVersion`
+        # sometimes fails to walk up in that layout. Installing it
+        # directly into apps/desktop/node_modules guarantees discovery.
+        working-directory: apps/desktop
+        shell: bash
+        run: |
+          if [ ! -d "node_modules/electron" ]; then
+            echo "electron not found in apps/desktop/node_modules, installing locally..."
+            npm install --no-save --no-audit --no-fund --install-strategy=nested electron@30.5.1
+          else
+            echo "electron present: $(cat node_modules/electron/package.json | grep '\"version\"')"
+          fi
+
       - name: Build shared-types
         run: npm run build -w packages/shared-types
 
