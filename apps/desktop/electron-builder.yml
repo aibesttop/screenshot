@@ -11,6 +11,21 @@ files:
   - "dist-renderer/**/*"
   - "package.json"
 
+# Runtime resources (tray icon, etc.) — accessible via
+# `process.resourcesPath` inside the packaged app.
+extraResources:
+  - from: build
+    to: build
+    filter:
+      - "tray-icon.png"
+
+# Custom URL scheme for auth deep-link callbacks. NSIS will register
+# `snaplink://` as a protocol handler on install.
+protocols:
+  - name: SnapLink
+    schemes:
+      - snaplink
+
 asar: true
 asarUnpack:
   - "node_modules/keytar/**/*"

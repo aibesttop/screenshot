@@ -2,8 +2,8 @@ import {
   app,
   BrowserWindow,
   ipcMain,
+  Menu,
   shell,
-  protocol,
 } from "electron";
 import path from "path";
 import { ScreenshotWatcher } from "./services/watcher";
@@ -24,10 +24,29 @@ import { registerFeedbackIPC } from "./ipc/feedback";
 import { uploadClipboardImage } from "./services/uploader";
 import { CopyFormat } from "./services/clipboard";
 
-// Prevent multiple instances
+// Prevent multiple instances — if this returned false, another copy is
+// already running. We forward any deep-link argv to it via the
+// `second-instance` event below, then exit without starting the rest of
+// the app.
 const gotSingleInstanceLock = app.requestSingleInstanceLock();
 if (!gotSingleInstanceLock) {
   app.quit();
+  process.exit(0);
+}
+
+// Register as the default handler for snaplink:// deep links so the OS
+// routes auth callbacks back into the app. Must run early (before
+// whenReady) and before the installer's first launch, hence also
+// declared in electron-builder.yml `protocols:` for Windows.
+if (process.defaultApp) {
+  // In dev, argv[1] is the script path — pass it so re-launch works.
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient("snaplink", process.execPath, [
+      path.resolve(process.argv[1]),
+    ]);
+  }
+} else {
+  app.setAsDefaultProtocolClient("snaplink");
 }
 
 let mainWindow: BrowserWindow | null = null;
@@ -56,10 +75,42 @@ function createMainWindow(): BrowserWindow {
     win.loadFile(path.join(__dirname, "../dist-renderer/index.html"));
   }
 
+  // If the renderer fails to load (wrong path, missing bundle, etc.),
+  // auto-open DevTools so the user can see what broke instead of
+  // staring at a blank window.
+  win.webContents.on(
+    "did-fail-load",
+    (_event, errorCode, errorDescription, validatedURL) => {
+      console.error(
+        `[Main] did-fail-load code=${errorCode} desc=${errorDescription} url=${validatedURL}`
+      );
+      if (!win.isDestroyed()) {
+        win.show();
+        win.webContents.openDevTools({ mode: "detach" });
+      }
+    }
+  );
+
+  // F12 / Ctrl+Shift+I toggles DevTools in both dev and prod — useful
+  // for diagnosing packaged-build issues without having to rebuild.
+  win.webContents.on("before-input-event", (_event, input) => {
+    if (input.type !== "keyDown") return;
+    const isDevtoolsShortcut =
+      input.key === "F12" ||
+      (input.control && input.shift && input.key.toLowerCase() === "i");
+    if (isDevtoolsShortcut) {
+      win.webContents.toggleDevTools();
+    }
+  });
+
   win.on("close", (event) => {
     // Hide instead of close (keep in tray)
     event.preventDefault();
     win.hide();
+  });
+
+  win.on("closed", () => {
+    mainWindow = null;
   });
 
   return win;
@@ -207,10 +258,10 @@ function togglePause() {
 // ===== App lifecycle =====
 
 app.whenReady().then(() => {
-  // Register custom protocol for auth deep linking
-  protocol.registerHttpProtocol("snaplink", (request) => {
-    handleAuthCallback(request.url);
-  });
+  // This is a tray-driven utility — suppress the stock File/Edit/View
+  // menu bar on Windows/Linux. (On macOS the system menu bar is owned
+  // by the OS; setting null removes everything except the app menu.)
+  Menu.setApplicationMenu(null);
 
   // Register IPC handlers
   registerUploadIPC();
@@ -303,9 +354,12 @@ app.on("second-instance", (_event, commandLine) => {
     handleAuthCallback(url);
   }
 
-  // Focus existing window
+  // Surface the existing window — user probably re-launched expecting
+  // to see it, so show() in addition to focus() since the window is
+  // hidden-by-default in this tray app.
   if (mainWindow) {
     if (mainWindow.isMinimized()) mainWindow.restore();
+    if (!mainWindow.isVisible()) mainWindow.show();
     mainWindow.focus();
   }
 });
