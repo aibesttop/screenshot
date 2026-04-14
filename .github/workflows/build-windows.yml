@@ -38,10 +38,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Install root dependencies
-        run: npm ci
+        # Using `npm install` rather than `npm ci` because the repo
+        # doesn't yet have a committed package-lock.json.
+        run: npm install --no-audit --no-fund
 
       - name: Build shared-types
         run: npm run build -w packages/shared-types
