@@ -15,6 +15,14 @@ asar: true
 asarUnpack:
   - "node_modules/keytar/**/*"
 
+# We rebuild native modules ourselves in CI (see build-windows.yml).
+# We also don't want electron-builder to run `npm install --production`
+# in the appDir: in an npm workspace that prunes devDependencies from
+# the root node_modules, which removes 7zip-bin mid-build and breaks
+# packaging with `ENOENT ... 7za.exe`.
+npmRebuild: false
+buildDependenciesFromSource: false
+
 # macOS
 mac:
   category: public.app-category.developer-tools

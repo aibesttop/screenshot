@@ -113,6 +113,16 @@ jobs:
         working-directory: apps/desktop
         run: npm run build:electron
 
+      - name: Rebuild native modules for Electron
+        # electron-builder.yml sets `npmRebuild: false` to avoid the
+        # workspace-prune bug that deletes 7zip-bin. That means we
+        # have to rebuild keytar (our only native dep) ourselves
+        # against the Electron ABI.
+        working-directory: apps/desktop
+        shell: pwsh
+        run: |
+          npx --yes @electron/rebuild@3.6.0 -f -w keytar -v 30.5.1
+
       - name: Build Windows installer (electron-builder)
         working-directory: apps/desktop
         env:
