@@ -42,7 +42,28 @@ jobs:
       - name: Install root dependencies
         # Using `npm install` rather than `npm ci` because the repo
         # doesn't yet have a committed package-lock.json.
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --include=optional
+
+      - name: Repair 7zip-bin (known Windows npm bug)
+        # electron-builder depends on 7zip-bin, but the native
+        # win/x64/7za.exe sometimes fails to extract on Windows
+        # runners, causing `ENOENT ... 7za.exe` during packaging.
+        # Reinstalling the package on its own pulls the binary
+        # reliably.
+        shell: pwsh
+        run: |
+          $p = "node_modules/7zip-bin/win/x64/7za.exe"
+          if (-not (Test-Path $p)) {
+            Write-Host "7za.exe missing, reinstalling 7zip-bin..."
+            npm install 7zip-bin --no-save --force --no-audit --no-fund
+          }
+          if (-not (Test-Path $p)) {
+            Write-Error "7za.exe still missing after reinstall at $p"
+            Get-ChildItem node_modules/7zip-bin -Recurse -ErrorAction SilentlyContinue |
+              Select-Object FullName
+            exit 1
+          }
+          Write-Host "OK: $((Get-Item $p).Length) bytes"
 
       - name: Ensure electron is resolvable from apps/desktop
         # With npm workspaces `electron` is typically hoisted to the
