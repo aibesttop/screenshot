@@ -18,7 +18,7 @@ asarUnpack:
 # macOS
 mac:
   category: public.app-category.developer-tools
-  icon: build/icon.icns
+  # icon: build/icon.icns  # add when branding assets are ready
   hardenedRuntime: true
   gatekeeperAssess: false
   entitlements: build/entitlements.mac.plist
@@ -42,7 +42,7 @@ dmg:
 
 # Windows
 win:
-  icon: build/icon.ico
+  # icon: build/icon.ico  # add when branding assets are ready
   target:
     - target: nsis
       arch: [x64, arm64]
@@ -58,7 +58,7 @@ nsis:
 
 # Linux
 linux:
-  icon: build/icon.png
+  # icon: build/icon.png  # add when branding assets are ready
   category: Utility
   synopsis: "Screenshot to URL for AI workflows"
   target:
