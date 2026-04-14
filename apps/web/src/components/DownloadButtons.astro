@@ -1,0 +1,74 @@
+---
+// Platform-aware download buttons. Uses JS on the client to swap the
+// primary CTA to match the visitor's OS; falls back to "Download"
+// if JS is disabled.
+interface Props {
+  size?: "md" | "lg";
+  variant?: "primary" | "outline";
+}
+
+const { size = "md", variant = "primary" } = Astro.props as Props;
+
+const sizeClasses =
+  size === "lg"
+    ? "px-6 py-3 text-base"
+    : "px-5 py-2.5 text-sm";
+
+const primaryClasses =
+  variant === "primary"
+    ? "bg-brand hover:bg-brand-600 text-white"
+    : "border border-ink-700 hover:border-ink-500 text-white";
+
+const releasesUrl = "https://github.com/aibesttop/screenshot/releases/latest";
+---
+
+<div class="flex flex-wrap items-center gap-3" data-download-buttons>
+  <a
+    data-primary-download
+    href={releasesUrl}
+    class:list={[
+      "no-underline rounded-lg font-medium inline-flex items-center gap-2",
+      sizeClasses,
+      primaryClasses,
+    ]}
+  >
+    <span data-download-label>Download</span>
+  </a>
+  <details class="group relative">
+    <summary
+      class="list-none cursor-pointer no-underline rounded-lg border border-ink-700 hover:border-ink-500 text-white inline-flex items-center gap-1.5 px-3 py-2.5 text-sm select-none"
+    >
+      All platforms
+      <svg width="12" height="12" viewBox="0 0 12 12" class="transition-transform group-open:rotate-180" aria-hidden="true">
+        <path d="M3 4.5 L6 7.5 L9 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </summary>
+    <div class="absolute z-10 mt-2 right-0 min-w-[240px] rounded-lg border border-ink-700 bg-ink-900/95 backdrop-blur p-1 shadow-xl shadow-black/50">
+      <a href={releasesUrl} class="no-underline block px-3 py-2 rounded text-sm text-ink-200 hover:bg-ink-800 hover:text-white">
+        macOS <span class="text-ink-500">· Intel + Apple Silicon</span>
+      </a>
+      <a href={releasesUrl} class="no-underline block px-3 py-2 rounded text-sm text-ink-200 hover:bg-ink-800 hover:text-white">
+        Windows <span class="text-ink-500">· x64 + ARM64</span>
+      </a>
+      <a href={releasesUrl} class="no-underline block px-3 py-2 rounded text-sm text-ink-200 hover:bg-ink-800 hover:text-white">
+        Linux <span class="text-ink-500">· AppImage · deb · rpm</span>
+      </a>
+    </div>
+  </details>
+</div>
+
+<script>
+  // Detect OS and swap the primary label/icon. No network, no tracking.
+  const root = document.querySelector<HTMLElement>("[data-download-buttons]");
+  if (root) {
+    const label = root.querySelector<HTMLElement>("[data-download-label]");
+    if (label) {
+      const ua = navigator.userAgent;
+      let os = "your Mac";
+      if (/Windows/.test(ua)) os = "Windows";
+      else if (/Mac/.test(ua)) os = "Mac";
+      else if (/Linux/.test(ua)) os = "Linux";
+      label.textContent = `Download for ${os}`;
+    }
+  }
+</script>
