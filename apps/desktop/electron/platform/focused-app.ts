@@ -108,6 +108,9 @@ async function detectWin(): Promise<FocusedApp> {
   // PowerShell one-liner that calls GetForegroundWindow +
   // GetWindowThreadProcessId and resolves the process name. Kept inline
   // so we don't ship a separate .ps1 file.
+  //
+  // NOTE: `$pid` is a read-only automatic variable in PowerShell —
+  // assigning to it throws. Use `$procId` instead.
   const script = `
 Add-Type @'
 using System;
@@ -118,9 +121,9 @@ public class W {
 }
 '@
 $h = [W]::GetForegroundWindow()
-$pid = 0
-[void][W]::GetWindowThreadProcessId($h, [ref]$pid)
-(Get-Process -Id $pid).ProcessName
+$procId = 0
+[void][W]::GetWindowThreadProcessId($h, [ref]$procId)
+(Get-Process -Id $procId).ProcessName
 `;
   try {
     const { stdout } = await exec(

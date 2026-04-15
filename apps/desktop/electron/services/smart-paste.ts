@@ -20,7 +20,11 @@ export interface SmartPasteContext {
 // NOT synthesize the paste keystroke — that would require a native
 // dependency and the extra manual step is a reasonable trade-off.
 export async function runSmartPaste(ctx: SmartPasteContext): Promise<void> {
-  if (isCaptureInProgress()) return;
+  console.log("[smart-paste] hotkey fired");
+  if (isCaptureInProgress()) {
+    console.log("[smart-paste] capture already in progress, ignoring");
+    return;
+  }
 
   // Detect the foreground app *before* the overlay steals focus.
   let target: FocusedApp;

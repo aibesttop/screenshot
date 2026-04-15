@@ -37,11 +37,19 @@ export function registerHotkeys(handlers: HotkeyHandlers) {
   ];
 
   for (const binding of bindings) {
+    if (!binding.key || typeof binding.key !== "string") {
+      // Defensive — settings migration should guarantee this, but skip
+      // registration rather than passing undefined to Electron.
+      console.warn("[Hotkeys] Skipping empty accelerator");
+      continue;
+    }
     try {
       const success = globalShortcut.register(binding.key, binding.handler);
-      if (!success) {
+      if (success) {
+        console.log(`[Hotkeys] Registered: ${binding.key}`);
+      } else {
         console.warn(
-          `[Hotkeys] Failed to register hotkey: ${binding.key}`
+          `[Hotkeys] Failed to register hotkey: ${binding.key} (in use by another app?)`
         );
       }
     } catch (err) {
