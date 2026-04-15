@@ -18,7 +18,11 @@ const defaults: Settings = {
   ocrLanguages: ["eng"],
 
   hotkeys: {
-    uploadClipboard: "CmdOrCtrl+Shift+V",
+    // Ctrl/Cmd+Shift+V: capture region → picker (image vs URL).
+    // This is the flagship flow. Moved the old "upload clipboard" hotkey
+    // to Alt+Shift+V so both behaviors remain accessible.
+    smartPaste: "CmdOrCtrl+Shift+V",
+    uploadClipboard: "Alt+Shift+V",
     toggleHistory: "CmdOrCtrl+Shift+H",
     togglePause: "CmdOrCtrl+Shift+P",
   },

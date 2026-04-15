@@ -23,6 +23,7 @@ import { registerBillingIPC } from "./ipc/billing";
 import { registerFeedbackIPC } from "./ipc/feedback";
 import { uploadClipboardImage } from "./services/uploader";
 import { CopyFormat } from "./services/clipboard";
+import { runSmartPaste } from "./services/smart-paste";
 
 // Prevent multiple instances — if this returned false, another copy is
 // already running. We forward any deep-link argv to it via the
@@ -241,6 +242,18 @@ async function handleUploadClipboard() {
   }
 }
 
+async function handleSmartPaste() {
+  await runSmartPaste({
+    getSettings,
+    mainWindow,
+    onTrayState: (state) => appTray?.setState(state),
+    onRecentUpload: (upload) => {
+      addRecentUpload(upload);
+      appTray?.updateMenu();
+    },
+  });
+}
+
 function togglePause() {
   const settings = getSettings();
   const newEnabled = !settings.enabled;
@@ -283,6 +296,9 @@ app.whenReady().then(() => {
 
   // Create system tray
   appTray = new AppTray({
+    onSmartPaste: () => {
+      void handleSmartPaste();
+    },
     onUploadClipboard: handleUploadClipboard,
     onToggleHistory: () => {
       if (mainWindow) {
@@ -316,6 +332,9 @@ app.whenReady().then(() => {
 
   // Register global hotkeys
   registerHotkeys({
+    onSmartPaste: () => {
+      void handleSmartPaste();
+    },
     onUploadClipboard: handleUploadClipboard,
     onToggleHistory: () => {
       if (mainWindow) {

@@ -38,6 +38,18 @@ export function showOcrComplete(url: string) {
   notification.show();
 }
 
+export function showPasteReady(format: "image" | "url", detail: string) {
+  const notification = new Notification({
+    title:
+      format === "image"
+        ? "SnapLink — image ready"
+        : "SnapLink — URL ready",
+    body: `${detail}  ·  Press Ctrl+V (⌘V) to paste`,
+    silent: true,
+  });
+  notification.show();
+}
+
 export function showUpdateAvailable(version: string) {
   const notification = new Notification({
     title: "SnapLink Update Available",

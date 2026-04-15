@@ -2,6 +2,7 @@ import { globalShortcut } from "electron";
 import { getSettings } from "./store";
 
 interface HotkeyHandlers {
+  onSmartPaste: () => void;
   onUploadClipboard: () => void;
   onToggleHistory: () => void;
   onTogglePause: () => void;
@@ -17,6 +18,10 @@ export function registerHotkeys(handlers: HotkeyHandlers) {
   const settings = getSettings();
 
   const bindings: Array<{ key: string; handler: () => void }> = [
+    {
+      key: settings.hotkeys.smartPaste,
+      handler: handlers.onSmartPaste,
+    },
     {
       key: settings.hotkeys.uploadClipboard,
       handler: handlers.onUploadClipboard,

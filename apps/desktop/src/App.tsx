@@ -31,8 +31,6 @@ function App() {
     }
   }, [notification]);
 
-  const isLoggedIn = settings?.deviceToken != null;
-
   return (
     <div className="h-screen flex flex-col bg-gray-950 text-gray-100">
       {/* Notification Toast */}

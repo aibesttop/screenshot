@@ -12,6 +12,7 @@ import { getSettings, updateSettings } from "./store";
 export type TrayState = "idle" | "uploading" | "error" | "offline";
 
 interface TrayOptions {
+  onSmartPaste: () => void;
   onUploadClipboard: () => void;
   onToggleHistory: () => void;
   onOpenSettings: () => void;
@@ -98,6 +99,11 @@ export class AppTray {
     const contextMenu = Menu.buildFromTemplate([
       { label: statusLabel, enabled: false },
       { type: "separator" as const },
+      {
+        label: "Capture & paste...",
+        accelerator: settings.hotkeys.smartPaste,
+        click: () => this.options.onSmartPaste(),
+      },
       {
         label: "Upload clipboard image",
         accelerator: settings.hotkeys.uploadClipboard,

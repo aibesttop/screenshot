@@ -31,7 +31,7 @@ interface AppState {
   initEventListeners: () => () => void;
 }
 
-export const useAppStore = create<AppState>((set, get) => ({
+export const useAppStore = create<AppState>((set) => ({
   settings: null,
   settingsLoading: true,
   uploads: [],
