@@ -1,0 +1,105 @@
+---
+layout: ../../layouts/Doc.astro
+title: Installation
+description: Install SnapLink on macOS, Windows, or Linux via installer or package manager.
+updated: April 2026
+---
+
+# Installation
+
+SnapLink ships as native installers for macOS, Windows, and Linux. All builds
+are code-signed (Apple notarized, Windows EV, Linux GPG-signed repositories).
+
+## macOS
+
+### DMG (recommended)
+
+1. Download `SnapLink-<version>.dmg` from the
+   [latest release](https://github.com/aibesttop/screenshot/releases/latest).
+2. Open the DMG and drag SnapLink.app into Applications.
+3. Launch from Spotlight. The first launch will ask for:
+   - Accessibility permission (for global hotkeys)
+   - Input Monitoring (required for <code>Cmd+Shift+V</code>)
+
+### Homebrew
+
+```
+brew install --cask snaplink
+```
+
+## Windows
+
+### MSI installer
+
+1. Download `SnapLink-Setup-<version>.exe`.
+2. Run it. SmartScreen may show a "Windows protected your PC" dialog on first
+   install — click "More info" → "Run anyway". The installer is signed with an
+   EV certificate, so reputation will build and this prompt will disappear.
+3. SnapLink auto-starts on login by default. You can disable this in
+   Settings → Core.
+
+### Winget
+
+```
+winget install SnapLink.SnapLink
+```
+
+## Linux
+
+### AppImage
+
+```
+chmod +x SnapLink-<version>.AppImage
+./SnapLink-<version>.AppImage
+```
+
+### Debian / Ubuntu
+
+```
+curl -fsSL https://snaplink.io/apt/snaplink.gpg | sudo tee /etc/apt/keyrings/snaplink.gpg > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/snaplink.gpg] https://snaplink.io/apt stable main" | sudo tee /etc/apt/sources.list.d/snaplink.list
+sudo apt update && sudo apt install snaplink
+```
+
+### Fedora / RHEL
+
+```
+sudo dnf config-manager --add-repo https://snaplink.io/rpm/snaplink.repo
+sudo dnf install snaplink
+```
+
+### Snap
+
+```
+sudo snap install snaplink
+```
+
+## Verify the signature
+
+### macOS
+
+```
+codesign --verify --deep --strict --verbose=2 /Applications/SnapLink.app
+spctl --assess --verbose /Applications/SnapLink.app
+```
+
+Expected: `accepted source=Notarized Developer ID`.
+
+### Windows
+
+Right-click the installer → Properties → Digital Signatures. Verify the
+signer is `SnapLink, Inc.` and the timestamp is valid.
+
+### Linux
+
+```
+gpg --verify SnapLink-<version>.AppImage.asc SnapLink-<version>.AppImage
+```
+
+## Self-hosting the backend
+
+If you don't want your screenshots on our servers, you can self-host the
+entire backend. See the
+[README on GitHub](https://github.com/aibesttop/screenshot#self-hosting) for
+Docker Compose setup. Point the desktop app at your server from
+Settings → Advanced → Upload endpoint.

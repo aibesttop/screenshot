@@ -1,0 +1,91 @@
+---
+layout: ../../layouts/Doc.astro
+title: OCR & text extraction
+description: Get the OCR text of any SnapLink screenshot with a URL suffix.
+updated: April 2026
+---
+
+# OCR &amp; text extraction
+
+Every SnapLink upload is processed through Tesseract asynchronously. The
+resulting plain text is served on a dedicated endpoint.
+
+## The .txt trick
+
+```
+Image  → https://snp.ink/a7Xc9f2
+OCR    → https://snp.ink/a7Xc9f2.txt
+```
+
+This is the fastest way to paste an error message, terminal output, or
+whiteboard photo into a prompt without re-typing.
+
+```
+curl -s https://snp.ink/a7Xc9f2.txt
+```
+
+Response is `text/plain; charset=utf-8`.
+
+## Status values
+
+OCR runs asynchronously. While the text is being extracted the `.txt`
+endpoint returns `202 Accepted`:
+
+| Status | Meaning |
+|---|---|
+| `pending` | Queued, no worker has picked it up yet. |
+| `processing` | A worker is running Tesseract on the image. |
+| `completed` | Text is available at the `.txt` endpoint. |
+| `failed` | OCR could not be completed. The endpoint returns `404`. |
+| `skipped` | OCR was disabled for this upload. |
+
+## Languages
+
+The free tier runs English-only Tesseract for speed. Pro users can configure
+additional languages in Settings → OCR → Languages:
+
+```
+eng chi_sim chi_tra jpn kor deu fra spa por ita rus ara
+```
+
+Add language codes separated by spaces. Each additional language slightly
+increases latency.
+
+## Image preprocessing
+
+SnapLink's OCR pipeline upsamples small images and applies a light grayscale
+threshold before handing to Tesseract. This produces noticeably better
+results on:
+
+- Dark-theme terminals
+- Small UI text (font size ≤ 12px at 1x DPI)
+- Phone screenshots with status bars
+
+No configuration needed — it's automatic.
+
+## Limits
+
+| Tier | Max image dimension | Max file size | Languages |
+|---|---|---|---|
+| Free | 4000 × 4000 px | 10 MB | English only |
+| Pro | 8000 × 8000 px | 50 MB | 100+ |
+| Team | Unlimited | 50 MB | 100+ |
+
+Images larger than the max are downscaled before OCR.
+
+## Using with Claude
+
+The most powerful pattern is sending Claude both:
+
+```
+Here's the stack trace and the dashboard screenshot:
+
+https://snp.ink/a7Xc9f2       # image
+https://snp.ink/a7Xc9f2.txt   # OCR text for quick search
+
+What's the root cause?
+```
+
+Claude can "see" the image while using the text for search/grep operations
+within the same turn. With the [MCP server](/docs/mcp) integrated, Claude
+can also search across your entire screenshot history.

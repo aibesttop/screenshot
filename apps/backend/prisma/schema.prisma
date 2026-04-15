@@ -115,3 +115,27 @@ model ProjectMember {
 
   @@unique([userId, projectId])
 }
+
+enum FeedbackCategory {
+  BUG
+  FEATURE
+  QUESTION
+  OTHER
+}
+
+model Feedback {
+  id          String           @id @default(cuid())
+  userId      String?
+  email       String?
+  category    FeedbackCategory @default(OTHER)
+  message     String           @db.Text
+  diagnostics Json?
+  ipHash      String
+  userAgent   String?
+  createdAt   DateTime         @default(now())
+  resolvedAt  DateTime?
+
+  @@index([userId])
+  @@index([category])
+  @@index([createdAt])
+}

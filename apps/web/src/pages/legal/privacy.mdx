@@ -1,0 +1,156 @@
+---
+layout: ../../layouts/Doc.astro
+title: Privacy Policy
+description: How SnapLink collects, uses, and protects your data.
+updated: April 14, 2026
+---
+
+# Privacy Policy
+
+**Effective date:** April 14, 2026.
+
+This Privacy Policy explains how SnapLink, Inc. ("SnapLink", "we") collects,
+uses, and shares information when you use the SnapLink desktop app, website,
+and related services (together, the "Service").
+
+Plain-English summary at the top. The legal language below is a complement to
+it, not a replacement.
+
+## TL;DR
+
+- **What we store**: your screenshots, their OCR text, your account email, and
+  minimal metadata.
+- **Why**: to serve the URLs, run OCR, manage your subscription, and detect
+  abuse.
+- **What we don't do**: sell your data, share it with advertisers, or train
+  models on your screenshots.
+- **Retention**: uploads follow the expiration you set (`never`, `1h`, `1d`,
+  `7d`, `30d`). Account data is deleted within 30 days of account deletion.
+- **Where**: primary region is the US (Cloudflare R2 and AWS us-east-1). EU
+  residency is available on the Team plan.
+
+## 1. Information we collect
+
+### 1.1 Information you provide
+
+- **Account information**: email address, subscription status, billing
+  metadata (we never see your card; Stripe does).
+- **Uploaded content**: the screenshots you upload and any metadata you add
+  (filename, tags).
+- **Support correspondence**: messages you send to `support@snaplink.io`.
+
+### 1.2 Information collected automatically
+
+- **Device metadata**: OS, SnapLink version, non-identifying device hash.
+  This is used to authenticate your client and detect abuse.
+- **Usage telemetry** (opt-in only): anonymized feature usage. Off by default.
+- **Crash reports** (opt-in only): stack traces with redacted file paths. Off
+  by default.
+- **Upload metadata**: size, dimensions, MIME type, timestamp, IP hash.
+
+### 1.3 What we deliberately don't collect
+
+- We do **not** run third-party analytics on the website or the app by
+  default.
+- We do **not** collect your browsing history, file system contents, or any
+  data outside the screenshot folders you configure.
+- We do **not** read the contents of files you haven't uploaded.
+- We do **not** train models on your screenshots, OCR text, or usage.
+
+## 2. How we use information
+
+- **Provide the Service**: store and serve screenshots, run OCR, manage
+  sessions, enforce plan limits.
+- **Communicate**: transactional email (magic links, receipts, security
+  alerts). We don't send marketing email unless you opt in.
+- **Prevent abuse**: detect and remove content that violates our AUP (see
+  Terms), including automated CSAM scanning.
+- **Improve the Service**: aggregated, anonymized insights — only if you
+  opt in.
+
+## 3. How we share information
+
+- **Sub-processors** (see §7): infrastructure providers that process data
+  under strict DPAs.
+- **Legal compliance**: if we receive a valid legal demand, we comply after
+  scrutiny and will notify you unless legally prohibited.
+- **Safety**: we share reports of CSAM with NCMEC as required by law.
+- **Never with advertisers**. We don't run ads on the Service.
+
+## 4. Your rights
+
+Depending on your jurisdiction (GDPR, CCPA, UK-GDPR, and similar), you have
+the right to:
+
+- **Access** the data we hold about you.
+- **Correct** inaccurate data.
+- **Delete** your account and associated data.
+- **Port** your data to another service.
+- **Object** to certain processing.
+- **Withdraw consent** at any time for opt-in processing.
+
+To exercise any of these rights, email
+<a href="mailto:privacy@snaplink.io">privacy@snaplink.io</a>. We respond
+within 30 days.
+
+## 5. Data retention
+
+| Data class | Retention |
+|---|---|
+| Screenshots | Per upload's expiration setting (default: `never` on Pro, 7 days on Free). Deleted permanently on expiration. |
+| OCR text | Same as its parent screenshot. |
+| Account data | Until account deletion, then deleted within 30 days. |
+| Security logs (auth, abuse) | 90 days. |
+| Billing records | As required by tax law (typically 7 years). |
+
+## 6. Security
+
+- TLS 1.3 in transit, AES-256 at rest.
+- Authentication via magic link + device-scoped JWT. Tokens stored in the OS
+  keychain.
+- Password-less by design — there is no password to steal.
+- Annual third-party penetration test. SOC 2 Type II in progress.
+
+Report vulnerabilities to <a href="mailto:security@snaplink.io">security@snaplink.io</a>.
+PGP fingerprint: `B7 1E 3F A2 8C 4D 9E 60  11 DA 5C E8 07 F4 2B 95`.
+
+## 7. Sub-processors
+
+| Provider | Purpose | Data residency |
+|---|---|---|
+| Cloudflare R2 | Screenshot storage and CDN | Global, primary US |
+| Cloudflare Workers | Edge auth / rate limit | Global |
+| AWS (us-east-1) | Application servers, Postgres, Redis | US |
+| Stripe | Subscription payments | US |
+| Resend | Transactional email (magic links, receipts) | US |
+| Sentry | Crash reporting (opt-in) | US |
+| PostHog | Usage analytics (opt-in) | US (self-hosted EU option on Team) |
+
+We'll update this list at least 30 days before adding a new sub-processor
+that handles personal data.
+
+## 8. International transfers
+
+Your data may be processed in the United States. Transfers rely on
+Standard Contractual Clauses (SCCs) where required.
+
+## 9. Children
+
+SnapLink is not directed to children under 13. We do not knowingly collect
+information from children under 13.
+
+## 10. Changes
+
+We'll post changes on this page with a new "Effective date." Material
+changes will be emailed to active users at least 14 days before taking
+effect.
+
+## 11. Contact
+
+- General privacy: <a href="mailto:privacy@snaplink.io">privacy@snaplink.io</a>
+- Security: <a href="mailto:security@snaplink.io">security@snaplink.io</a>
+- Postal: SnapLink, Inc. — address provided on request.
+
+EU representative (Art. 27 GDPR): contact
+<a href="mailto:eu-rep@snaplink.io">eu-rep@snaplink.io</a>.
+UK representative: <a href="mailto:uk-rep@snaplink.io">uk-rep@snaplink.io</a>.

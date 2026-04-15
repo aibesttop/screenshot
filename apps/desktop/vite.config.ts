@@ -4,6 +4,10 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
+  // Relative base so asset URLs in index.html work under file:// after
+  // electron-builder packages the renderer. Without this, Vite emits
+  // `/assets/...` which 404s when loaded from inside app.asar.
+  base: "./",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

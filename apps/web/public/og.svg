@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0d18"/>
+      <stop offset="100%" stop-color="#05060e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.2" cy="0.1" r="0.8">
+      <stop offset="0%" stop-color="#5b8cff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#5b8cff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.9" cy="0.9" r="0.6">
+      <stop offset="0%" stop-color="#5b8cff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#5b8cff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Logo mark -->
+  <g transform="translate(80,80)">
+    <rect width="72" height="72" rx="16" fill="#0b0d18" stroke="#5b8cff" stroke-width="3"/>
+    <rect x="14" y="16" width="44" height="32" rx="4" fill="none" stroke="#5b8cff" stroke-width="3"/>
+    <circle cx="36" cy="32" r="8" fill="#5b8cff"/>
+    <rect x="28" y="50" width="16" height="4" rx="2" fill="#5b8cff"/>
+  </g>
+  <text x="170" y="127" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial" font-size="36" font-weight="600" fill="#ffffff">SnapLink</text>
+
+  <!-- Headline -->
+  <text x="80" y="260" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial" font-size="84" font-weight="700" fill="#ffffff" letter-spacing="-2">
+    Drop a screenshot.
+  </text>
+  <text x="80" y="360" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial" font-size="84" font-weight="700" fill="#5b8cff" letter-spacing="-2">
+    Get a short URL.
+  </text>
+
+  <!-- Subline -->
+  <text x="80" y="440" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial" font-size="28" fill="#a9b0c2">
+    Built for pasting into Claude, ChatGPT, and Cursor.
+  </text>
+  <text x="80" y="478" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial" font-size="28" fill="#a9b0c2">
+    OCR built-in. Under 500ms. Mac, Windows, Linux.
+  </text>
+
+  <!-- URL chip -->
+  <g transform="translate(80,540)">
+    <rect width="320" height="50" rx="10" fill="#161a2b" stroke="#252b40" stroke-width="1"/>
+    <text x="20" y="32" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#5b8cff">https://snp.ink/a7Xc9f2</text>
+  </g>
+  <g transform="translate(420,540)">
+    <text x="0" y="32" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial" font-size="20" fill="#525a73">
+      copied to clipboard in 287ms
+    </text>
+  </g>
+
+  <!-- Decorative grid -->
+  <g opacity="0.05" fill="none" stroke="#5b8cff" stroke-width="1">
+    <line x1="0" y1="90" x2="1200" y2="90"/>
+    <line x1="0" y1="180" x2="1200" y2="180"/>
+    <line x1="0" y1="540" x2="1200" y2="540"/>
+  </g>
+</svg>

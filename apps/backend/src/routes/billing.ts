@@ -78,9 +78,9 @@ export async function billingRoutes(app: FastifyInstance) {
   app.post(
     "/billing/webhook",
     {
-      config: {
-        rawBody: true,
-      },
+      // `rawBody` is provided by fastify-raw-body when loaded; we cast to
+      // sidestep the missing typing and preserve the intent.
+      config: { rawBody: true } as Record<string, unknown>,
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const signature = request.headers["stripe-signature"];

@@ -8,6 +8,7 @@ import { serveRoutes } from "./routes/serve";
 import { healthRoutes } from "./routes/health";
 import { billingRoutes } from "./routes/billing";
 import { reportRoutes } from "./routes/report";
+import { feedbackRoutes } from "./routes/feedback";
 import { startCleanupSchedule } from "./jobs/cleanup";
 import dotenv from "dotenv";
 
@@ -28,8 +29,27 @@ async function buildApp() {
     bodyLimit: 52_428_800, // 50MB
   });
 
+  // CORS: in production, restrict to an allowlist from env.
+  // Desktop/Electron requests send `Origin: null` or no origin — we always
+  // allow those because image uploads must work from the desktop app.
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+  const isProd = process.env.NODE_ENV === "production";
   await app.register(cors, {
-    origin: true,
+    origin: (origin, cb) => {
+      // No origin (server-to-server, curl, Electron file://) → allow
+      if (!origin) return cb(null, true);
+      // Non-prod: allow everything for local dev
+      if (!isProd) return cb(null, true);
+      // Prod: strict allowlist
+      if (allowedOrigins.length === 0) {
+        // No allowlist configured → reject unknown origins in prod
+        return cb(null, false);
+      }
+      return cb(null, allowedOrigins.includes(origin));
+    },
     credentials: true,
   });
 
@@ -51,6 +71,7 @@ async function buildApp() {
   await app.register(authRoutes, { prefix: "/api/v1" });
   await app.register(billingRoutes, { prefix: "/api/v1" });
   await app.register(reportRoutes, { prefix: "/api/v1" });
+  await app.register(feedbackRoutes, { prefix: "/api/v1" });
   await app.register(serveRoutes);
 
   return app;

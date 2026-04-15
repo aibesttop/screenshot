@@ -78,6 +78,8 @@ export interface Settings {
   ocrLanguages: string[];
 
   hotkeys: {
+    // Primary: capture a region + show the image-vs-URL picker.
+    smartPaste: string;
     uploadClipboard: string;
     toggleHistory: string;
     togglePause: string;

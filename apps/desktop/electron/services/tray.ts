@@ -12,6 +12,7 @@ import { getSettings, updateSettings } from "./store";
 export type TrayState = "idle" | "uploading" | "error" | "offline";
 
 interface TrayOptions {
+  onSmartPaste: () => void;
   onUploadClipboard: () => void;
   onToggleHistory: () => void;
   onOpenSettings: () => void;
@@ -31,9 +32,7 @@ export class AppTray {
   }
 
   create() {
-    // Use a simple 16x16 icon — in production, use platform-specific icons
-    const iconPath = this.getIconPath();
-    const icon = nativeImage.createEmpty();
+    const icon = this.loadIcon();
     this.tray = new Tray(icon);
 
     this.tray.setToolTip("SnapLink — Screenshot to URL");
@@ -44,14 +43,37 @@ export class AppTray {
     });
   }
 
-  private getIconPath(): string {
-    // In development, use a placeholder path
-    // In production, these would be platform-specific icons
-    const isDev = !app.isPackaged;
-    if (isDev) {
-      return path.join(__dirname, "../../public/icons/tray-icon.png");
+  private loadIcon(): Electron.NativeImage {
+    // Try the runtime icon path first. `createEmpty()` on Windows
+    // produces an invisible-but-clickable tray entry — users can't
+    // find it. A real bitmap keeps the tray discoverable.
+    const candidates = this.getIconCandidates();
+    for (const p of candidates) {
+      try {
+        const img = nativeImage.createFromPath(p);
+        if (!img.isEmpty()) return img;
+      } catch {
+        // fall through to next candidate
+      }
     }
-    return path.join(process.resourcesPath, "icons/tray-icon.png");
+    // Last resort — invisible on Windows but won't crash. macOS handles
+    // empty images gracefully by showing `setTitle` text instead.
+    return nativeImage.createEmpty();
+  }
+
+  private getIconCandidates(): string[] {
+    if (app.isPackaged) {
+      // electron-builder ships `build/` contents via `extraResources`
+      // at `process.resourcesPath`.
+      return [
+        path.join(process.resourcesPath, "build", "tray-icon.png"),
+        path.join(process.resourcesPath, "tray-icon.png"),
+      ];
+    }
+    return [
+      path.join(__dirname, "../../build/tray-icon.png"),
+      path.join(__dirname, "../../public/icons/tray-icon.png"),
+    ];
   }
 
   updateMenu() {
@@ -77,6 +99,11 @@ export class AppTray {
     const contextMenu = Menu.buildFromTemplate([
       { label: statusLabel, enabled: false },
       { type: "separator" as const },
+      {
+        label: "Capture & paste...",
+        accelerator: settings.hotkeys.smartPaste,
+        click: () => this.options.onSmartPaste(),
+      },
       {
         label: "Upload clipboard image",
         accelerator: settings.hotkeys.uploadClipboard,

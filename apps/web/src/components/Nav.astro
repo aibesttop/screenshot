@@ -1,0 +1,42 @@
+---
+const { pathname } = Astro.url;
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/docs", label: "Docs" },
+  { href: "/support", label: "Support" },
+];
+
+function isActive(href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+}
+---
+
+<header class="border-b border-ink-800/80 bg-ink-950/70 backdrop-blur sticky top-0 z-20">
+  <nav class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 text-white font-semibold no-underline">
+      <img src="/favicon.svg" alt="" class="w-6 h-6" />
+      <span>SnapLink</span>
+    </a>
+    <div class="flex items-center gap-5 text-sm">
+      {
+        links.slice(1).map((l) => (
+          <a
+            href={l.href}
+            class={`no-underline ${isActive(l.href) ? "text-white" : "text-ink-300 hover:text-white"}`}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <a
+        href="https://github.com/aibesttop/screenshot/releases/latest"
+        class="no-underline rounded-md bg-brand hover:bg-brand-600 text-white text-sm font-medium px-3 py-1.5"
+      >
+        Download
+      </a>
+    </div>
+  </nav>
+</header>

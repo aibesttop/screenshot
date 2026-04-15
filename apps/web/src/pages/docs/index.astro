@@ -1,0 +1,34 @@
+---
+import Doc from "../../layouts/Doc.astro";
+const frontmatter = {
+  title: "Documentation",
+  description: "Learn how to install, configure, and integrate SnapLink with your AI tools.",
+  updated: "April 2026",
+};
+---
+
+<Doc frontmatter={frontmatter}>
+  <h1>SnapLink Documentation</h1>
+  <p>
+    SnapLink turns every screenshot into a short URL with OCR text, ready to
+    paste into Claude, ChatGPT, Cursor, or any LLM that understands image URLs.
+    These docs cover everything from first install to wiring the built-in MCP
+    server into Claude Desktop.
+  </p>
+  <h2>Where to start</h2>
+  <ul>
+    <li><a href="/docs/getting-started">Getting started</a> — end-to-end walkthrough from install to first upload.</li>
+    <li><a href="/docs/installation">Installation</a> — platform-specific installers and package managers.</li>
+    <li><a href="/docs/configuration">Configuration</a> — every setting, in detail.</li>
+    <li><a href="/docs/ocr">OCR &amp; text extraction</a> — how to grab the <code>.txt</code> of any screenshot.</li>
+    <li><a href="/docs/mcp">MCP integration</a> — plug SnapLink into Claude Desktop.</li>
+    <li><a href="/docs/faq">FAQ</a> — quick answers to the questions we get most.</li>
+  </ul>
+  <h2>Need help?</h2>
+  <p>
+    Email <a href="mailto:support@snaplink.io">support@snaplink.io</a> or open
+    a GitHub issue at
+    <a href="https://github.com/aibesttop/screenshot/issues">aibesttop/screenshot</a>.
+    For security concerns, write to <a href="mailto:security@snaplink.io">security@snaplink.io</a>.
+  </p>
+</Doc>

@@ -9,14 +9,39 @@ directories:
 files:
   - "dist-electron/**/*"
   - "dist-renderer/**/*"
-  - "!node_modules/**/*"
+  - "package.json"
+
+# Runtime resources (tray icon, etc.) — accessible via
+# `process.resourcesPath` inside the packaged app.
+extraResources:
+  - from: build
+    to: build
+    filter:
+      - "tray-icon.png"
+
+# Custom URL scheme for auth deep-link callbacks. NSIS will register
+# `snaplink://` as a protocol handler on install.
+protocols:
+  - name: SnapLink
+    schemes:
+      - snaplink
 
 asar: true
+asarUnpack:
+  - "node_modules/keytar/**/*"
+
+# We rebuild native modules ourselves in CI (see build-windows.yml).
+# We also don't want electron-builder to run `npm install --production`
+# in the appDir: in an npm workspace that prunes devDependencies from
+# the root node_modules, which removes 7zip-bin mid-build and breaks
+# packaging with `ENOENT ... 7za.exe`.
+npmRebuild: false
+buildDependenciesFromSource: false
 
 # macOS
 mac:
   category: public.app-category.developer-tools
-  icon: build/icon.icns
+  # icon: build/icon.icns  # add when branding assets are ready
   hardenedRuntime: true
   gatekeeperAssess: false
   entitlements: build/entitlements.mac.plist
@@ -40,7 +65,7 @@ dmg:
 
 # Windows
 win:
-  icon: build/icon.ico
+  # icon: build/icon.ico  # add when branding assets are ready
   target:
     - target: nsis
       arch: [x64, arm64]
@@ -56,7 +81,7 @@ nsis:
 
 # Linux
 linux:
-  icon: build/icon.png
+  # icon: build/icon.png  # add when branding assets are ready
   category: Utility
   synopsis: "Screenshot to URL for AI workflows"
   target:
@@ -72,6 +97,6 @@ linux:
 
 publish:
   - provider: github
-    owner: yourorg
-    repo: snaplink
+    owner: aibesttop
+    repo: screenshot
     releaseType: release

@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+dist
+**/dist
+dist-electron
+dist-renderer
+.git
+.github
+.vscode
+.idea
+*.log
+.DS_Store
+uploads
+coverage
+.env
+.env.*
+!.env.example

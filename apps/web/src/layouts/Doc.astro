@@ -1,0 +1,121 @@
+---
+import Base from "./Base.astro";
+
+interface Frontmatter {
+  title: string;
+  description?: string;
+  updated?: string;
+}
+
+interface Props {
+  frontmatter: Frontmatter;
+}
+
+const { frontmatter } = Astro.props as Props;
+const { pathname } = Astro.url;
+
+const docs = [
+  { href: "/docs", label: "Overview" },
+  { href: "/docs/getting-started", label: "Getting started" },
+  { href: "/docs/installation", label: "Installation" },
+  { href: "/docs/configuration", label: "Configuration" },
+  { href: "/docs/ocr", label: "OCR & text extraction" },
+  { href: "/docs/mcp", label: "MCP integration" },
+  { href: "/docs/faq", label: "FAQ" },
+];
+
+const legal = [
+  { href: "/legal/privacy", label: "Privacy Policy" },
+  { href: "/legal/terms", label: "Terms of Service" },
+];
+
+const launch = [
+  { href: "/launch/product-hunt", label: "Product Hunt post" },
+  { href: "/launch/hacker-news", label: "Hacker News post" },
+  { href: "/launch/social", label: "Social posts" },
+];
+
+function isActive(href: string) {
+  return pathname === href || pathname === href + "/";
+}
+---
+
+<Base title={`${frontmatter.title} — SnapLink`} description={frontmatter.description}>
+  <div class="max-w-6xl mx-auto px-5 py-10 grid gap-10 md:grid-cols-[220px_1fr]">
+    <aside class="text-sm">
+      <div class="sticky top-20 space-y-6">
+        <nav>
+          <div class="text-xs uppercase tracking-wider text-ink-400 mb-2">Documentation</div>
+          <ul class="space-y-1">
+            {
+              docs.map((l) => (
+                <li>
+                  <a
+                    href={l.href}
+                    class={`block no-underline rounded px-2 py-1 ${
+                      isActive(l.href)
+                        ? "bg-ink-800 text-white"
+                        : "text-ink-300 hover:text-white hover:bg-ink-800/60"
+                    }`}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <nav>
+          <div class="text-xs uppercase tracking-wider text-ink-400 mb-2">Legal</div>
+          <ul class="space-y-1">
+            {
+              legal.map((l) => (
+                <li>
+                  <a
+                    href={l.href}
+                    class={`block no-underline rounded px-2 py-1 ${
+                      isActive(l.href)
+                        ? "bg-ink-800 text-white"
+                        : "text-ink-300 hover:text-white hover:bg-ink-800/60"
+                    }`}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <nav>
+          <div class="text-xs uppercase tracking-wider text-ink-400 mb-2">Launch</div>
+          <ul class="space-y-1">
+            {
+              launch.map((l) => (
+                <li>
+                  <a
+                    href={l.href}
+                    class={`block no-underline rounded px-2 py-1 ${
+                      isActive(l.href)
+                        ? "bg-ink-800 text-white"
+                        : "text-ink-300 hover:text-white hover:bg-ink-800/60"
+                    }`}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </aside>
+    <article class="doc-prose">
+      <slot />
+      {
+        frontmatter.updated && (
+          <p class="text-xs text-ink-500 mt-16">Last updated: {frontmatter.updated}</p>
+        )
+      }
+    </article>
+  </div>
+</Base>
